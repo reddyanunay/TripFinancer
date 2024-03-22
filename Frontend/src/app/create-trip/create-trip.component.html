@@ -1,0 +1,14 @@
+<div>
+  <label>Trip Name:</label>
+  <input type="text" [(ngModel)]="tripName">
+
+  <label>Number of Members:</label>
+  <input type="number" [(ngModel)]="numMembers" (input)="generateMemberInputs()" min="0" max="15">
+  
+  <div *ngFor="let member of members; let i = index">
+    <label>Member {{ i + 1 }} Name:</label>
+    <input type="text" [(ngModel)]="members[i]">
+  </div>
+
+  <button (click)="submitDetails()">Submit Details</button>
+</div>
