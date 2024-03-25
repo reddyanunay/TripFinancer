@@ -1,9 +1,9 @@
 <div>
   <label>Trip Name:</label>
-  <input type="text" [(ngModel)]="tripName">
+  <input type="text" [(ngModel)]="this.Trip.trip_name">
 
   <label>Number of Members:</label>
-  <input type="number" [(ngModel)]="numMembers" (input)="generateMemberInputs()" min="0" max="15">
+  <input type="number" [(ngModel)]="this.Trip.no_of_people" (input)="generateMemberInputs()" min="0" max="15">
   
   <div *ngFor="let member of members; let i = index">
     <label>Member {{ i + 1 }} Name:</label>

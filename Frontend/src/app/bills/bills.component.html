@@ -1,1 +1,7 @@
-<p>bills works!</p>
+<div>
+    <h1>Bills</h1>
+    <ul>
+        <li *ngFor="let bill of bills">{{ bill.name }} - {{ bill.amount }}</li>
+    </ul>
+    <button (click)="openCreateBillPopup()">Create Bill</button>
+</div>

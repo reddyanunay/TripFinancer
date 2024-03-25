@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ApicallsService } from '../apicalls.service';
 
 @Component({
   selector: 'app-create-trip',
@@ -6,25 +7,41 @@ import { Component } from '@angular/core';
   styleUrls: ['./create-trip.component.css']
 })
 export class CreateTripComponent {
-  tripName: string = '';
-  numMembers: number = 0;
+  constructor(private apiser:ApicallsService){}
   members: string[] = [];
+  Trip={
+    tripId:0,
+    trip_name:'',
+    no_of_people:0
+  }
+  get memberInput(){
+    return{
+      memberNames:this.members,
+      trip:this.Trip,
+    }
+  }
 
   generateMemberInputs() {
-    if (this.numMembers > 15) {
-      // If the number of members exceeds the limit, set it to the maximum allowed value
-      this.numMembers = 15;
+    if (this.Trip.no_of_people > 15) {
+      this.Trip.no_of_people = 15;
     }
-    this.members = new Array(this.numMembers).fill('').map(() => '');
+    this.members = new Array(this.Trip.no_of_people).fill('').map(() => '');
   }
   submitDetails() {
-    // Implement the logic to submit the trip details, such as sending an HTTP request to a server
-    console.log('Trip Name:', this.tripName);
-    console.log('Members:', this.members);
+
+    this.apiser.postTrip(this.Trip).subscribe(
+      (trip:any)=>{
+        this.Trip.tripId=trip.tripId;
+      }
+    );
+    this.apiser.postMembers(this.memberInput).subscribe(alert("members inserted"));
+    
     // Reset the form fields after submission if needed
-    this.tripName = '';
-    this.numMembers = 0;
-    this.members = [];
+    // this.Trip.tripId = 0;
+    // this.Trip.trip_name = '';
+    // this.Trip.no_of_people = 0;
+    // this.members = [];
   }
+
 
 }
