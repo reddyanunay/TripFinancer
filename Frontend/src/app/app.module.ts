@@ -7,7 +7,8 @@ import { HeaderComponent } from './header/header.component';
 import { BillsComponent } from './bills/bills.component';
 import { StartATripComponent } from './start-atrip/start-atrip.component';
 import { CreateTripComponent } from './create-trip/create-trip.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    ReactiveFormsModule,
+    HttpClientModule  
   ],
   providers: [],
   bootstrap: [AppComponent]

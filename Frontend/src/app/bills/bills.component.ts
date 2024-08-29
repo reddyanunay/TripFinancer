@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./bills.component.css']
 })
 export class BillsComponent {
+  openCreateBillPopup() {
+    // Code to open the create bill popup goes here
+  }
 
 }

@@ -10,6 +10,7 @@ export class StartATripComponent {
   constructor(private router:Router){}
 
   navigateToOtherPage(){
+    console.log('Navigating to /app-create-trip');
     this.router.navigate(['/app-create-trip']);
   }
 

@@ -1,47 +1,56 @@
 import { Component } from '@angular/core';
 import { ApicallsService } from '../apicalls.service';
+import { FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-trip',
   templateUrl: './create-trip.component.html',
-  styleUrls: ['./create-trip.component.css']
+  styleUrls: ['./create-trip.component.css'] // add the ReactiveFormsModule to the imports array
 })
 export class CreateTripComponent {
-  constructor(private apiser:ApicallsService){}
-  members: string[] = [];
-  Trip={
-    tripId:0,
-    trip_name:'',
-    no_of_people:0
-  }
-  get memberInput(){
-    return{
-      memberNames:this.members,
-      trip:this.Trip,
-    }
+  tripForm: FormGroup;
+  Trip:any = {};
+
+  constructor(private fb: FormBuilder,private apiser:ApicallsService,private router:Router) {
+    this.tripForm = this.fb.group({
+      trip_id: [],
+      trip_name: [''],
+      no_of_people: [0],
+      members: this.fb.array([])
+    });
   }
 
-  generateMemberInputs() {
-    if (this.Trip.no_of_people > 15) {
-      this.Trip.no_of_people = 15;
+  get members() {
+    return this.tripForm.get('members') as FormArray;
+  }
+
+  onNumberOfPeopleChange() {
+    const numberOfMembers = Math.min(this.tripForm.value.no_of_people, 15);
+    while (this.members.length !== numberOfMembers) {
+      if (this.members.length < numberOfMembers) {
+        this.members.push(this.fb.control(''));
+      } else {
+        this.members.removeAt(this.members.length - 1);
+      }
     }
-    this.members = new Array(this.Trip.no_of_people).fill('').map(() => '');
   }
   submitDetails() {
-
-    this.apiser.postTrip(this.Trip).subscribe(
-      (trip:any)=>{
-        this.Trip.tripId=trip.tripId;
+    const formValue = this.tripForm.value;
+    const tripData = {
+      tripName: formValue.trip_name,
+      noOfPeople: formValue.no_of_people,
+      members: formValue.members
+    };
+    console.log('Trip data:', tripData);
+    this.apiser.postTrip(tripData).subscribe(
+      (response:any)=>{
+        this.Trip=response;
+      },
+      (error: any) => {
+        console.error('Error posting trip:', error);
       }
     );
-    this.apiser.postMembers(this.memberInput).subscribe(alert("members inserted"));
-    
-    // Reset the form fields after submission if needed
-    // this.Trip.tripId = 0;
-    // this.Trip.trip_name = '';
-    // this.Trip.no_of_people = 0;
-    // this.members = [];
+    this.router.navigate(['/app-bills']);
   }
-
-
 }
