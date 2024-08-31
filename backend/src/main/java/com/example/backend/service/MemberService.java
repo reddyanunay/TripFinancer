@@ -1,7 +1,6 @@
 package com.example.backend.service;
 
-import com.example.backend.domain.Member;
-import com.example.backend.domain.Trip;
+import com.example.backend.domain.*;
 import com.example.backend.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,8 +29,14 @@ public class MemberService {
         return m;
     }
 
-    public List<Member> findAllMembers(){
-        List<Member> ml=memberRepo.findAll();
-        return ml;
+    public List<MemberRequestDTO> findAllMembersByTripId(Long tripId){
+        List<MemberRequestDTO> mDTO = new ArrayList<>();
+        for(Member mem:memberRepo.findByTrip_TripId(tripId)){
+            MemberRequestDTO m = new MemberRequestDTO();
+            m.setMemberId(mem.getMemberId());
+            m.setName(mem.getName());
+            mDTO.add(m);
+        }
+        return mDTO;
     }
 }

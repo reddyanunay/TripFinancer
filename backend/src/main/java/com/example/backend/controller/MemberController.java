@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.domain.Member;
+import com.example.backend.domain.MemberRequestDTO;
 import com.example.backend.domain.Trip;
 import com.example.backend.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +36,10 @@ public class MemberController {
         return new ResponseEntity<List<Member>>(members,HttpStatus.CREATED);
     }
 
-    @GetMapping("/getAllMembers")
-    public ResponseEntity<?> getAll(){
-        List<Member> ml=memberService.findAllMembers();
-        return new ResponseEntity<List<Member>>(ml,HttpStatus.OK);
+    @GetMapping("/getAllMembers/{tripId}")
+    public ResponseEntity<?> getAll(@PathVariable Long tripId){
+        List<MemberRequestDTO> ml=memberService.findAllMembersByTripId(tripId);
+        return new ResponseEntity<List<MemberRequestDTO>>(ml,HttpStatus.OK);
     }
 
 }

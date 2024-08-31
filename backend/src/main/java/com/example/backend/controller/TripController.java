@@ -26,7 +26,7 @@ public class TripController {
         trip.setTrip_name(tripRequest.getTripName());
         trip.setNo_of_people(tripRequest.getNoOfPeople());
         tripService.createTrip(trip);
-        for(String membername: tripRequest.getMembers()){
+        for(String membername : tripRequest.getMembers()){
             Member member = new Member();
             member.setName(membername);
             member.setTrip(trip);

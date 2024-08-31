@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.domain.Bill;
+import com.example.backend.domain.BillRequestDTO;
 import com.example.backend.service.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class BillController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllBills() {
-        List<Bill> bills = billService.getAllBills();
-        return new ResponseEntity<List<Bill>>(bills, HttpStatus.OK);
+        List<BillRequestDTO> bills = billService.getAllBills();
+        return new ResponseEntity<List<BillRequestDTO>>(bills, HttpStatus.OK);
     }
 }

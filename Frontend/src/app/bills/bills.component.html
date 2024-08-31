@@ -1,7 +1,51 @@
-<!-- <div>
-    <h1>Bills</h1>
-    <ul>
-        <li *ngFor="let bill of bills">{{ bill.name }} - {{ bill.amount }}</li>
+<div class="bills-container">
+    <h2>
+      <span class="left-item">All Bills</span>
+      <span class="right-item"><button (click)="openBillModal()">Create Bill</button></span>
+      
+    </h2>
+    
+    <!-- List of Bills -->
+    <ul class="bills-list"> 
+      <li *ngFor="let bill of bills" (click)="openBillModal(bill)" class="bill-item">
+        <span class="left-item">{{ bill.description }}</span>
+        <span class="right-item">{{ bill.billAmount }}</span>
+        
+      </li>
     </ul>
-    <button (click)="openCreateBillPopup()">Create Bill</button>
-</div> -->
+    
+    <!-- Modal for Creating/Editing a Bill -->
+    <div class="modal-backdrop" *ngIf="isModalOpen">
+      <div class="modal-content">
+        <h3>{{ selectedBill ? 'Edit Bill' : 'Create Bill' }}</h3>
+        
+        <form [formGroup]="billForm" (ngSubmit)="onSubmit()">
+          <label for="description">Description:</label>
+          <input type="text" id="description" formControlName="description">
+          
+          <label for="amount">Amount:</label>
+          <input type="number" id="amount" formControlName="amount">
+          
+          <!-- Members -->
+          <div formArrayName="members">
+            <div *ngFor="let member of allMembers; let i = index">
+              <label>
+                <input type="checkbox" [formControlName]="i">
+                {{ member.name }}
+              </label>
+              
+              <!-- Toggle button to choose who paid for the bill -->
+              <label>
+                <input type="radio" formControlName="paidByMember" [value]="member.memberId">
+                Paid by {{ member.name }}
+              </label>
+            </div>
+          </div>
+  
+          <button type="submit">{{ selectedBill ? 'Update Bill' : 'Create Bill' }}</button>
+          <button type="button" (click)="closeModal()">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  

@@ -20,4 +20,16 @@ export class ApicallsService {
   postMembers(data:any){
     return this.http.post('',data);
   }
+  getMembers():Observable<any>{
+    return this.http.get('');
+  }
+  getBills() : Observable<any>{
+    return this.http.get(`${this.apiUrl}/api/bills/all`);
+  }
+  createBill(bill:any) : Observable<any>{
+    return this.http.post('',bill);
+  }
+  updateBill(bill:any) : Observable<any>{
+    return this.http.put('',bill);
+  }
 }
