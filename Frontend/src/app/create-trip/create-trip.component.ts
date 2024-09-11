@@ -35,6 +35,13 @@ export class CreateTripComponent {
       }
     }
   }
+  handleSuccess(response: any): void {
+    // Process the response if needed, then navigate to the next page
+    console.log('Trip successfully Created:', response);
+    // After successful response, navigate to the next page
+    this.router.navigate(['/app-bills']);  // Replace '/next-page' with the actual route
+  }
+
   submitDetails() {
     const formValue = this.tripForm.value;
     const tripData = {
@@ -46,11 +53,11 @@ export class CreateTripComponent {
     this.apiser.postTrip(tripData).subscribe(
       (response:any)=>{
         this.Trip=response;
+        this.handleSuccess(response);
       },
       (error: any) => {
         console.error('Error posting trip:', error);
       }
     );
-    this.router.navigate(['/app-bills']);
   }
 }
