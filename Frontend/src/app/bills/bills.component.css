@@ -39,11 +39,13 @@
     align-items: center;
   }
   
+  /* Modal Content CSS */
   .modal-content {
     background-color: white;
-    padding: 20px;
+    padding: 30px; /* Increased padding */
     border-radius: 10px;
-    width: 400px;
+    width: 600px; /* Adjust width as needed */
+    max-width: 90%; /* Ensure it does not exceed viewport width */
   }
 
   h2 {
@@ -51,6 +53,10 @@
     justify-content: space-between;
     align-items: center; /* Optional: to vertically center the items */
     padding: 10px; /* Optional: to add some padding */
+  }
+  .paid-member {
+    background-color: #4CAF50; /* Highlight color */
+    color: white;
   }
   
   .left-item {

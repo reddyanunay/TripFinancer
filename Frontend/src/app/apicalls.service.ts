@@ -20,8 +20,8 @@ export class ApicallsService {
   postMembers(data:any){
     return this.http.post('',data);
   }
-  getMembers():Observable<any>{
-    return this.http.get('');
+  getMembers(tripId:any):Observable<any>{
+    return this.http.get(`${this.apiUrl}/api/members/getAllMembers/${tripId}`);
   }
   getBills() : Observable<any>{
     return this.http.get(`${this.apiUrl}/api/bills/all`);
