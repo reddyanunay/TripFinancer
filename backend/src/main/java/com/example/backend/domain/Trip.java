@@ -25,8 +25,14 @@ public class Trip {
     private int no_of_bills;
 
     @OneToMany(mappedBy = "trip",cascade=CascadeType.ALL)
+    @JsonIgnoreProperties({"billAmount", "paidByMember", "trip", "bill_all_expenses"})
     private List<Bill> allBills;
 
     @OneToMany(mappedBy = "trip",cascade=CascadeType.ALL)
+    @JsonIgnoreProperties({"billAmount", "paidByMember", "trip", "bill_all_expenses","personalCosts","my_all_expenses","billsPaid"})
     private List<Member> allMembers;
+    public void updateTotalCostAndBillCount(double billAmount) {
+        this.total_cost += billAmount;
+        this.no_of_bills += 1;
+    }
 }

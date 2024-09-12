@@ -20,10 +20,12 @@ public class Expense {
 
     @ManyToOne
     @JoinColumn(name = "bill_id",referencedColumnName = "billId")
+    @JsonIgnoreProperties({"billAmount", "paidByMember", "trip", "bill_all_expenses"})
     private Bill bill;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
+    @JsonIgnoreProperties({"billAmount", "paidByMember", "trip", "bill_all_expenses","billsPaid", "personalCosts","my_all_expenses"})
     private Member member;
 
     private double share;

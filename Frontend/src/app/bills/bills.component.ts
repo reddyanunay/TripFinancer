@@ -38,7 +38,7 @@ export class BillsComponent {
 
   // Get members from Backend
   getMembers() {
-    this.billService.getMembers(1).subscribe(
+    this.billService.getMembers(sessionStorage.getItem('tripId')).subscribe(
       (data: any[]) => {
         this.allMembers = data;
         console.log(this.allMembers);
@@ -77,7 +77,7 @@ export class BillsComponent {
 
   // Get all the bills from Backend
   getBills(): void {
-    this.billService.getBills().subscribe(
+    this.billService.getBills(sessionStorage.getItem('tripId')).subscribe(
       (data: any[]) => {
         this.bills = data;
       },
@@ -175,20 +175,24 @@ export class BillsComponent {
       billId: this.billForm.get('billId')?.value,
       description: this.billForm.get('description')?.value,
       billAmount: this.billForm.get('billAmount')?.value,
-      paidByMember: this.billForm.get('paidByMember')?.value, // Must not be null
-      trip: this.billForm.get('trip')?.value,
-      members: selectedMembers // Only selected members are included
+      paidByMemberId: this.billForm.get('paidByMember')?.value, // Must not be null
+      trip: sessionStorage.getItem('tripId'), // Get the trip ID from session storage
+      allExpenses: selectedMembers // Only selected members are included
     };
-  
-    console.log(billData);
     this.calculateExpenseList(selectedMembers);
   
     if (this.selectedBill) {
       this.billService.updateBill(billData).subscribe(/* handle response */);
     } else {
-      this.billService.createBill(billData).subscribe(/* handle response */);
+      this.billService.createBill(billData).subscribe(
+        (response:any)=>{
+          console.log('Bill created:', response);
+          this.getBills();
+        },
+        (error: any) => {
+          console.error('Error creating bill:', error);
+        });
     }
-  
     this.closeModal();
   }
 }

@@ -13,7 +13,6 @@ import java.util.List;
 @ToString
 public class TripRequestDTO {
     private String tripName;
-    @JsonProperty("no_of_people")
     private int noOfPeople;
     private List<String> members;
 }

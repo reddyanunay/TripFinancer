@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,15 @@ export class ApicallsService {
 
   
   postTrip(trip:any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/api/trips/trip`,trip);
+    return this.http.post(`${this.apiUrl}/api/trips/trip`,trip).pipe(
+      tap((response: any) => {
+        const tripId = response?.tripId;
+      if (tripId) {
+        sessionStorage.setItem('tripId', tripId);
+      }
+    }
+    )
+  );
   }
 
   //here data should be of format Map<string,object> (memberNames,trip) as fields,
@@ -23,11 +31,12 @@ export class ApicallsService {
   getMembers(tripId:any):Observable<any>{
     return this.http.get(`${this.apiUrl}/api/members/getAllMembers/${tripId}`);
   }
-  getBills() : Observable<any>{
-    return this.http.get(`${this.apiUrl}/api/bills/all`);
+  getBills(tripId:any) : Observable<any>{
+    return this.http.get(`${this.apiUrl}/api/bills/all/${tripId}`);
   }
   createBill(bill:any) : Observable<any>{
-    return this.http.post('',bill);
+    console.log(bill);
+    return this.http.post(`${this.apiUrl}/api/bills/createWithExpenses`,bill);
   }
   updateBill(bill:any) : Observable<any>{
     return this.http.put('',bill);

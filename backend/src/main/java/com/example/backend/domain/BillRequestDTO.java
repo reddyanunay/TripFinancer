@@ -14,14 +14,19 @@ import java.util.List;
 @ToString
 public class BillRequestDTO {
     private Long billId;
+    private Long trip;//tripId
     private Double billAmount;
 
-    @JsonIgnoreProperties({"trip","billsPaid","my_all_expenses","personalCosts"})
-    private Member paidByMember;
+    private Long paidByMemberId;
 
-//    private Long tripId;
-    @JsonIgnoreProperties({"trip","billsPaid","my_all_expenses","personalCosts","bill"})
-    private List<Expense> bill_all_expenses;
+    private List<ExpenseRequestDTO> allExpenses;
 
     private String description;
+
+    //billAmount
+    //billId
+    //description
+    //members
+    //paidByMember
+    //trip
 }

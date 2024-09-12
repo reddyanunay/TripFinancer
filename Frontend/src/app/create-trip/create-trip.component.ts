@@ -16,7 +16,7 @@ export class CreateTripComponent {
     this.tripForm = this.fb.group({
       trip_id: [],
       trip_name: [''],
-      no_of_people: [0],
+      no_of_people: 0,
       members: this.fb.array([])
     });
   }

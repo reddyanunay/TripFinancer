@@ -21,10 +21,16 @@ public class BillController {
         Bill b=billService.createBill(bill);
         return new ResponseEntity<Bill>(b, HttpStatus.CREATED);
     }
+    @PostMapping("/createWithExpenses")
+    public ResponseEntity<?> createBillWithExpenses(@RequestBody BillRequestDTO billDto) {
+        System.out.println("BillDto: "+billDto);
+        Bill b=billService.createBillWithExpenses(billDto);
+        return new ResponseEntity<Bill>(b, HttpStatus.CREATED);
+    }
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllBills() {
-        List<BillRequestDTO> bills = billService.getAllBills();
+    @GetMapping("/all/{tripId}")
+    public ResponseEntity<?> getAllBills(@PathVariable Long tripId) {
+        List<BillRequestDTO> bills = billService.getAllBillsByTripId(tripId);
         return new ResponseEntity<List<BillRequestDTO>>(bills, HttpStatus.OK);
     }
 }

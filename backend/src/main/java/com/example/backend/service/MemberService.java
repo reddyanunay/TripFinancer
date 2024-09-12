@@ -28,6 +28,9 @@ public class MemberService {
         }
         return m;
     }
+    public Member getMemberById(Long id){
+        return memberRepo.findById(id).orElse(null);
+    }
 
     public List<MemberRequestDTO> findAllMembersByTripId(Long tripId){
         List<MemberRequestDTO> mDTO = new ArrayList<>();

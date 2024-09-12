@@ -25,13 +25,16 @@ public class Bill {
 
     @ManyToOne
     @JoinColumn(name = "paid_by_member_id", referencedColumnName = "memberId")
+    @JsonIgnoreProperties({"billsPaid", "paidByMember", "trip", "my_all_expenses","personalCosts"})
     private Member paidByMember;
 
     @ManyToOne
     @JoinColumn(name = "trip_id", referencedColumnName = "tripId")
+    @JsonIgnoreProperties({"billAmount", "paidByMember", "trip", "bill_all_expenses","allBills","no_of_bills","no_of_people","total_cost","allMembers"})
     private Trip trip;
 
     @OneToMany(mappedBy = "bill")
+    @JsonIgnoreProperties({"billAmount", "paidByMember", "trip", "bill_all_expenses","bill"})
     private List<Expense> bill_all_expenses;
 
     private String description;
