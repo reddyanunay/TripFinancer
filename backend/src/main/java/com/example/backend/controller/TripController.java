@@ -21,17 +21,7 @@ public class TripController {
 
     @PostMapping("/trip")
     public ResponseEntity<?> saveTrip(@RequestBody TripRequestDTO tripRequest) {
-        System.out.println(tripRequest);
-        Trip trip = new Trip();
-        trip.setTrip_name(tripRequest.getTripName());
-        trip.setNo_of_people(tripRequest.getNoOfPeople());
-        tripService.createTrip(trip);
-        for(String membername : tripRequest.getMembers()){
-            Member member = new Member();
-            member.setName(membername);
-            member.setTrip(trip);
-            memberservice.saveMember(member);
-        }
+        Trip trip = tripService.createTrip(tripRequest);
         return new ResponseEntity<Trip>(trip, HttpStatus.CREATED);
     }
 

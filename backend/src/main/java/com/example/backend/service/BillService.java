@@ -41,6 +41,9 @@ public class BillService {
         bill.setTrip(trip);
 
         Bill savedBill = billRepo.save(bill);
+        trip.getAllBills().add(savedBill); // Add the new bill to the list
+        trip.updateTotalCostAndBillCount(bill.getBillAmount()); // Update cost and bill count
+        tripSer.saveTrip(trip);
 
         List<Expense> expenses = new ArrayList<>();
 
