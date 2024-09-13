@@ -39,6 +39,6 @@ export class ApicallsService {
     return this.http.post(`${this.apiUrl}/api/bills/createWithExpenses`,bill);
   }
   updateBill(bill:any) : Observable<any>{
-    return this.http.put('',bill);
+    return this.http.put(`${this.apiUrl}/api/bills/update`,bill);
   }
 }

@@ -33,4 +33,10 @@ public class BillController {
         List<BillRequestDTO> bills = billService.getAllBillsByTripId(tripId);
         return new ResponseEntity<List<BillRequestDTO>>(bills, HttpStatus.OK);
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateBillWithExpenses(@RequestBody BillRequestDTO billDto){
+        Bill b=billService.updateBillWithExpenses(billDto);
+        return new ResponseEntity<Bill>(b, HttpStatus.CREATED);
+    }
 }

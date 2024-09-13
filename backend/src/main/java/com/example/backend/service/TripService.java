@@ -35,7 +35,7 @@ public class TripService {
             members.add(savedMember);
         }
         savedTrip.setAllMembers(members);
-        
+
         return tripRepo.save(savedTrip);
     }
 

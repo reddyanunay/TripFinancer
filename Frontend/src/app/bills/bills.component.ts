@@ -42,7 +42,7 @@ export class BillsComponent {
       (data: any[]) => {
         this.allMembers = data;
         console.log(this.allMembers);
-        this.initializeMembersFormArray();
+        this.initializeNewMembersFormArray();
       },
       (error) => {
         console.error('Error fetching members', error);
@@ -51,22 +51,52 @@ export class BillsComponent {
   }
 
   // After getting members from Backend set them in the form array
-  initializeMembersFormArray(): void {
+  initializeNewMembersFormArray(): void {
     const membersArray = this.members;
   
-  // Clear the form array to avoid duplicates
-  while (membersArray.length !== 0) {
-    membersArray.removeAt(0);
-  }
+    // Clear the form array to avoid duplicates
+    while (membersArray.length !== 0) {
+      membersArray.removeAt(0);
+    }
 
-  this.allMembers.forEach(member => {
-    membersArray.push(this.fb.group({
-      memberId: [member.memberId],
-      name: [member.name],
-      selected: [false], // This controls whether the member is included in the bill or not
-      amount: [0] // You can set the default amount as 0 or leave it blank
-    }));
-  });
+    this.allMembers.forEach(member => {
+      membersArray.push(this.fb.group({
+        memberId: [member.memberId],
+        name: [member.name],
+        selected: [false], // This controls whether the member is included in the bill or not
+        amount: [0] // You can set the default amount as 0 or leave it blank
+      }));
+    });
+  }
+  initializeUpdateMembersFormArray(bill:any): void {
+    const membersArray = this.members;
+
+    // Clear the form array to avoid duplicates
+    while (membersArray.length !== 0) {
+      membersArray.removeAt(0);
+    }
+
+    const expenses = bill.allExpenses || []; // Adjust property name based on actual data structure
+
+    // Get the ID of the member who paid for the bill
+    const paidByMemberId = bill.paidByMemberId; // Adjust property name based on actual data structure
+
+    this.allMembers.forEach((member, index) => {
+      // Find the corresponding expense for each member
+      const expense = expenses.find((e: { memberId: any; }) => e.memberId === member.memberId);
+
+      membersArray.push(this.fb.group({
+        memberId: [member.memberId],
+        name: [member.name],
+        selected: [!!expense], // Set to true if the member is in expenses
+        amount: [expense ? expense.amount : 0], // Set the amount if exists, otherwise 0
+      }));
+
+      // Set the paidByMember value if the member is the one who paid
+      if (member.memberId === paidByMemberId) {
+        this.setPaidByMember(index); // Use the function to set the payer
+      }
+    });
   }
 
   //Setting the paid by member
@@ -90,24 +120,46 @@ export class BillsComponent {
   //Opening the floating window
   openBillModal(bill: any = null): void {
     this.selectedBill = bill;
-  this.isModalOpen = true;
+    this.isModalOpen = true;
 
-  if (bill) {
-    this.billForm.patchValue({
-      billId: bill.billId,
-      billAmount: bill.billAmount,
-      paidByMember: bill.paidByMember,
-      trip: bill.trip,
-      description: bill.description
-    });
-    // Update members with the selected bill's data
-    this.billForm.setControl('members', this.fb.array([])); // Reset members array
-    this.initializeMembersFormArray(); // Reinitialize with members and update their selections if necessary
-  } else {
-    this.billForm.reset();
-    this.initializeMembersFormArray(); // Reinitialize for a new bill
+    if (bill) {
+      console.log('Selected bill:', bill);
+      this.billForm.patchValue({
+        billId: bill.billId,
+        billAmount: bill.billAmount,
+        paidByMember: bill.paidByMember?.memberId,
+        trip: bill.trip,
+        description: bill.description
+      });
+
+      // Update members with the selected bill's data
+      this.billForm.setControl('members', this.fb.array([])); // Reset members array
+      this.initializeUpdateMembersFormArray(bill);
+      // this.updateMembersWithExpenses(bill.allExpenses) // Reinitialize with members and update their selections if necessary
+    } else {
+      this.billForm.reset();
+      this.initializeNewMembersFormArray(); // Reinitialize for a new bill
+    }
   }
-  }
+
+  // updateMembersWithExpenses(expenses: any[]): void {
+  //   const membersArray = this.members;
+    
+  //   // Iterate over each expense and update the members form array
+  //   expenses.forEach(expense => {
+  //     const memberControl = membersArray.controls.find(control => control.get('memberId')?.value === expense.member.memberId);
+      
+  //     if (memberControl) {
+  //       // If the member is part of the bill's expenses, mark them as selected and set their amount
+  //       memberControl.patchValue({
+  //         selected: true,
+  //         amount: expense.share // Set the member's share
+  //       });
+  //     }
+  //   });
+  // }
+  
+  
 
   closeModal(): void {
     this.isModalOpen = false;
@@ -182,7 +234,15 @@ export class BillsComponent {
     this.calculateExpenseList(selectedMembers);
   
     if (this.selectedBill) {
-      this.billService.updateBill(billData).subscribe(/* handle response */);
+      console.log('Updating bill:', billData);
+      this.billService.updateBill(billData).subscribe(
+        (response: any) => {
+          console.log('Bill updated:', response);
+          this.getBills();
+        },
+        (error: any) => {
+          console.error('Error updating bill:', error);
+        });
     } else {
       this.billService.createBill(billData).subscribe(
         (response:any)=>{

@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BillService {
@@ -97,5 +99,72 @@ public class BillService {
         }
 
         return billDTOList;
+    }
+    @Transactional
+    public Bill updateBillWithExpenses(BillRequestDTO billDto) {
+        System.out.println("BillDto: " + billDto);
+
+        // Fetch the existing bill from the database
+        Bill existingBill = billRepo.findById(billDto.getBillId())
+                .orElseThrow(() -> new RuntimeException("Bill not found"));
+
+        // Update the bill details
+        existingBill.setBillAmount(billDto.getBillAmount());
+        existingBill.setDescription(billDto.getDescription());
+
+        // Update the paidByMember
+        Member paidByMember = memSer.getMemberById(billDto.getPaidByMemberId());
+        existingBill.setPaidByMember(paidByMember);
+
+        // Retrieve existing expenses for the bill
+        List<Expense> existingExpenses = new ArrayList<>(existingBill.getBill_all_expenses());
+
+        // Create a map of existing expenses for quick lookup
+        Map<Long, Expense> expenseMap = existingExpenses.stream()
+                .collect(Collectors.toMap(expense -> expense.getMember().getMemberId(), expense -> expense));
+
+        List<ExpenseRequestDTO> newExpenseDtos = billDto.getAllExpenses();
+
+        // Update or add expenses
+        for (ExpenseRequestDTO expenseDto : newExpenseDtos) {
+            Expense existingExpense = expenseMap.remove(expenseDto.getMemberId());
+            if (existingExpense != null) {
+                // Update existing expense
+                existingExpense.setShare(expenseDto.getAmount());
+                expRepo.save(existingExpense);
+            } else {
+                // Create and add new expense
+                Expense newExpense = new Expense();
+                newExpense.setBill(existingBill);
+                newExpense.setShare(expenseDto.getAmount());
+
+                Member member = memSer.getMemberById(expenseDto.getMemberId());
+                newExpense.setMember(member);
+
+                expRepo.save(newExpense);
+            }
+        }
+
+        // Remove expenses that were not in the new list
+        if (!expenseMap.isEmpty()) {
+            expRepo.deleteAll(expenseMap.values());
+        }
+
+        // Save updated bill
+        Bill updatedBill = billRepo.save(existingBill);
+        updateTripDetails(existingBill.getTrip());
+        return updatedBill;
+    }
+
+    private void updateTripDetails(Trip trip) {
+        // Recalculate total cost and number of bills for the trip
+        double totalCost = trip.getAllBills().stream()
+                .mapToDouble(Bill::getBillAmount)
+                .sum();
+        trip.setTotal_cost(totalCost);
+        trip.setNo_of_bills(trip.getAllBills().size());
+
+        // Save the updated trip
+        tripSer.saveTrip(trip);
     }
 }
