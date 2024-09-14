@@ -39,4 +39,10 @@ public class BillController {
         Bill b=billService.updateBillWithExpenses(billDto);
         return new ResponseEntity<Bill>(b, HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/delete/{billId}")
+    public  ResponseEntity<?> deleteBill(@PathVariable Long billId){
+        billService.deleteBill(billId);
+        return new ResponseEntity<String>("Bill Deleted", HttpStatus.OK);
+    }
 }

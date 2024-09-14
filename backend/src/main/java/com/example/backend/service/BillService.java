@@ -56,6 +56,11 @@ public class BillService {
 
             // Set the member for the expense
             Member member = memSer.getMemberById(expenseDto.getMemberId());  // Assuming Member is fetched from the DB
+
+            //Updating the PersonalCosts of each member;
+            double previousPersonalCosts = member.getPersonalCosts();
+            member.setPersonalCosts(previousPersonalCosts + expenseDto.getAmount());
+
             expense.setMember(member);
 
             expenses.add(expense);
@@ -128,18 +133,28 @@ public class BillService {
         // Update or add expenses
         for (ExpenseRequestDTO expenseDto : newExpenseDtos) {
             Expense existingExpense = expenseMap.remove(expenseDto.getMemberId());
+            Member member = memSer.getMemberById(expenseDto.getMemberId());
+
             if (existingExpense != null) {
                 // Update existing expense
+                double previousShare = existingExpense.getShare();
                 existingExpense.setShare(expenseDto.getAmount());
+
+                // Adjust the personalCosts for the member
+                double previousPersonalCosts = member.getPersonalCosts();
+                member.setPersonalCosts(previousPersonalCosts - previousShare + expenseDto.getAmount());
+
                 expRepo.save(existingExpense);
             } else {
                 // Create and add new expense
                 Expense newExpense = new Expense();
                 newExpense.setBill(existingBill);
                 newExpense.setShare(expenseDto.getAmount());
-
-                Member member = memSer.getMemberById(expenseDto.getMemberId());
                 newExpense.setMember(member);
+
+                // Update the personalCosts of the member for new expense
+                double previousPersonalCosts = member.getPersonalCosts();
+                member.setPersonalCosts(previousPersonalCosts + expenseDto.getAmount());
 
                 expRepo.save(newExpense);
             }
@@ -147,7 +162,15 @@ public class BillService {
 
         // Remove expenses that were not in the new list
         if (!expenseMap.isEmpty()) {
-            expRepo.deleteAll(expenseMap.values());
+            for (Expense removedExpense : expenseMap.values()) {
+                Member member = removedExpense.getMember();
+
+                // Adjust the personalCosts for the member when an expense is removed
+                double previousPersonalCosts = member.getPersonalCosts();
+                member.setPersonalCosts(previousPersonalCosts - removedExpense.getShare());
+
+                expRepo.delete(removedExpense);
+            }
         }
 
         // Save updated bill
@@ -155,6 +178,40 @@ public class BillService {
         updateTripDetails(existingBill.getTrip());
         return updatedBill;
     }
+
+    @Transactional
+    public void deleteBill(Long billId) {
+        // Fetch the existing bill from the database
+        Bill bill = billRepo.findById(billId)
+                .orElseThrow(() -> new RuntimeException("Bill not found"));
+
+        // Get all expenses associated with the bill
+        List<Expense> expenses = bill.getBill_all_expenses();
+
+        // Adjust the personalCosts for each member involved in the bill
+        for (Expense expense : expenses) {
+            Member member = expense.getMember();
+
+            // Update the member's personalCosts by subtracting the share they had in this bill
+            double previousPersonalCosts = member.getPersonalCosts();
+            member.setPersonalCosts(previousPersonalCosts - expense.getShare());
+
+            // No need to save member explicitly, assuming cascading saves from Expense or MemberRepo saves them later.
+        }
+
+        // Remove the expenses associated with the bill
+        expRepo.deleteAll(expenses);
+
+        // Update the trip's total cost and bill count
+        Trip trip = bill.getTrip();
+        trip.updateTotalCostAndBillCount(-bill.getBillAmount());
+        trip.getAllBills().remove(bill);
+        tripSer.saveTrip(trip); // Save the updated trip
+
+        // Delete the bill
+        billRepo.delete(bill);
+    }
+
 
     private void updateTripDetails(Trip trip) {
         // Recalculate total cost and number of bills for the trip

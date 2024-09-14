@@ -32,7 +32,14 @@ public class Trip {
     @JsonIgnoreProperties({"billAmount", "paidByMember", "trip", "bill_all_expenses","personalCosts","my_all_expenses","billsPaid"})
     private List<Member> allMembers;
     public void updateTotalCostAndBillCount(double billAmount) {
+        // Update the total cost
         this.total_cost += billAmount;
-        this.no_of_bills += 1;
+
+        // Adjust the number of bills
+        if (billAmount > 0) {
+            this.no_of_bills += 1;
+        } else if (billAmount < 0 && this.no_of_bills > 0) {
+            this.no_of_bills -= 1;
+        }
     }
 }

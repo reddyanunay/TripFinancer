@@ -59,12 +59,14 @@
     color: white;
   }
   
-  .left-item {
-    /* You can add styles specific to the left item here */
+  .delete-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    float: right;
   }
   
-  .right-item {
-    /* You can add styles specific to the right item here */
-  }
   
   

@@ -41,4 +41,7 @@ export class ApicallsService {
   updateBill(bill:any) : Observable<any>{
     return this.http.put(`${this.apiUrl}/api/bills/update`,bill);
   }
+  deleteBill(billId:any) : Observable<any>{
+    return this.http.delete<string>(`${this.apiUrl}/api/bills/delete/${billId}`, { responseType: 'text' as 'json' });
+  }
 }

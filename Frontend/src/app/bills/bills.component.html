@@ -17,7 +17,9 @@
   <!-- Modal for Creating/Editing a Bill -->
   <div class="modal-backdrop" *ngIf="isModalOpen">
     <div class="modal-content">
-      <h3>{{ selectedBill ? 'Edit Bill' : 'Create Bill' }}</h3>
+      <h3>{{ selectedBill ? 'Edit Bill' : 'Create Bill' }}
+        <button *ngIf="selectedBill" type="button" (click)="deleteBill(selectedBill.billId)" class="delete-button">Delete</button>
+      </h3>
 
       <form [formGroup]="billForm" (ngSubmit)="onSubmit()">
         <label for="description">Description:</label>
