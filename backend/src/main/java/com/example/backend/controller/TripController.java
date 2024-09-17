@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.Exception.UserNotFoundException;
 import com.example.backend.domain.Member;
 import com.example.backend.domain.Trip;
 import com.example.backend.domain.TripRequestDTO;
@@ -20,7 +21,7 @@ public class TripController {
     private MemberService memberservice;
 
     @PostMapping("/trip")
-    public ResponseEntity<?> saveTrip(@RequestBody TripRequestDTO tripRequest) {
+    public ResponseEntity<?> saveTrip(@RequestBody TripRequestDTO tripRequest) throws UserNotFoundException {
         Trip trip = tripService.createTrip(tripRequest);
         return new ResponseEntity<Trip>(trip, HttpStatus.CREATED);
     }
@@ -29,5 +30,10 @@ public class TripController {
     public ResponseEntity<?> getTripById(@PathVariable Long id) {
         Trip t= tripService.getTrip(id);
         return new ResponseEntity<Trip>(t,HttpStatus.OK);
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteTrip(@PathVariable Long id) {
+        tripService.deleteTrip(id);
+        return new ResponseEntity<String>("Trip deleted successfully",HttpStatus.OK);
     }
 }

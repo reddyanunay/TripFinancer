@@ -15,4 +15,5 @@ public class TripRequestDTO {
     private String tripName;
     private int noOfPeople;
     private List<String> members;
+    private String email;
 }

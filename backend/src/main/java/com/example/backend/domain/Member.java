@@ -25,10 +25,10 @@ public class Member {
     @JoinColumn(name = "trip_id",referencedColumnName = "tripId")
     private Trip trip;
 
-    @OneToMany(mappedBy = "paidByMember",cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "paidByMember",cascade=CascadeType.ALL, orphanRemoval = true)
     private List<Bill> billsPaid;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Expense> my_all_expenses;
 
     private String name;

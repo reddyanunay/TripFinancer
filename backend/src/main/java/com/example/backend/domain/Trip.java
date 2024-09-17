@@ -24,13 +24,18 @@ public class Trip {
     private double total_cost;
     private int no_of_bills;
 
-    @OneToMany(mappedBy = "trip",cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "trip",cascade=CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"billAmount", "paidByMember", "trip", "bill_all_expenses"})
     private List<Bill> allBills;
 
-    @OneToMany(mappedBy = "trip",cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "trip",cascade=CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"billAmount", "paidByMember", "trip", "bill_all_expenses","personalCosts","my_all_expenses","billsPaid"})
     private List<Member> allMembers;
+
+    @ManyToOne
+    @JoinColumn(name = "user_email", referencedColumnName = "email")
+    @JsonIgnoreProperties({"billAmount", "paidByMember", "trip", "bill_all_expenses","allBills","no_of_bills","no_of_people","total_cost","allMembers"})
+    private User user;
     public void updateTotalCostAndBillCount(double billAmount) {
         // Update the total cost
         this.total_cost += billAmount;

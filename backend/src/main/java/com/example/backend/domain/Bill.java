@@ -33,7 +33,7 @@ public class Bill {
     @JsonIgnoreProperties({"billAmount", "paidByMember", "trip", "bill_all_expenses","allBills","no_of_bills","no_of_people","total_cost","allMembers"})
     private Trip trip;
 
-    @OneToMany(mappedBy = "bill")
+    @OneToMany(mappedBy = "bill",cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"billAmount", "paidByMember", "trip", "bill_all_expenses","bill"})
     private List<Expense> bill_all_expenses;
 
