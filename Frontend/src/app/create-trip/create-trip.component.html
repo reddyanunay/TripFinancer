@@ -1,16 +1,18 @@
-<div [formGroup]="tripForm">
-  <label>Trip Name:</label>
-  <input type="text" formControlName="trip_name">
+<div class="form-container">
+  <form [formGroup]="tripForm">
+    <label>Trip Name:</label>
+    <input type="text" formControlName="trip_name">
 
-  <label>Number of Members:</label>
-  <input type="number" formControlName="no_of_people" (change)="onNumberOfPeopleChange()" min="0" max="15">
-  
-  <div formArrayName="members">
-    <div *ngFor="let member of members.controls; let i = index">
-      <label>Member {{ i + 1 }} Name:</label>
-      <input type="text" [formControlName]="i">
+    <label>Number of Members:</label>
+    <input type="number" formControlName="no_of_people" (change)="onNumberOfPeopleChange()" min="0" max="15">
+    
+    <div formArrayName="members">
+      <div *ngFor="let member of members.controls; let i = index">
+        <label>Member {{ i + 1 }} Name:</label>
+        <input type="text" [formControlName]="i">
+      </div>
     </div>
-  </div>
 
-  <button (click)="submitDetails()">Submit Details</button>
+    <button (click)="submitDetails()">Submit Details</button>
+  </form>
 </div>

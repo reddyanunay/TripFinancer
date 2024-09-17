@@ -1,0 +1,111 @@
+<div>
+    <form [formGroup]="signupForm" novalidate (ngSubmit)="onSubmit()">
+      <mat-card class="shipping-card">
+        <mat-card-header>
+          <mat-card-title>Registeration Information</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+  
+          <div class="row">
+            <div class="col">
+              <mat-form-field>
+                <input matInput placeholder="First name" formControlName="firstName">
+                <mat-error *ngIf="signupForm.controls['firstName'].hasError('required')">
+                  First name is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col">
+              <mat-form-field>
+                <input matInput placeholder="Last name" formControlName="lastName">
+                <mat-error *ngIf="signupForm.controls['lastName'].hasError('required')">
+                  Last name is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+  
+          <!-- Other form fields... -->
+  
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width">
+                <input matInput placeholder="Email" formControlName="email">
+                <mat-error *ngIf="signupForm.controls['email'].hasError('required')">
+                  Email is <strong>required</strong>
+                </mat-error>
+                <mat-error *ngIf="signupForm.controls['email'].hasError('email')">
+                  Please enter a valid email address
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <!-- Other form fields... -->
+          <!-- Other form fields... -->
+  
+          <!-- <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width">
+                <input matInput placeholder="Mobile" formControlName="mobile">
+                <mat-error *ngIf="signupForm.controls['mobile'].hasError('required')">
+                  Mobile is <strong>required</strong>
+                </mat-error>
+                <mat-error *ngIf="signupForm.controls['mobile'].hasError('pattern')">
+                  Please enter a valid 10-digit mobile number
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div> -->
+  
+          <!-- Other form fields... -->
+  
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width">
+                <input matInput placeholder="Password" type="password" formControlName="password">
+                <mat-error *ngIf="signupForm.controls['password'].hasError('required')">
+                  Password is <strong>required</strong>
+                </mat-error>
+                <mat-error *ngIf="signupForm.controls['password'].hasError('minlength')">
+                  Password should be at least 8 characters long
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+  
+          <!-- Other form fields... -->
+  
+          <!-- Other form fields... -->
+  
+  
+  
+  
+          <!-- <div class="row">
+            <div class="col">
+              <label>select your role:</label>
+              <mat-radio-group formControlName="role">
+                <mat-radio-button value="client">Client</mat-radio-button>
+                <mat-radio-button value="counsellor">Counsellor</mat-radio-button>
+              </mat-radio-group>
+              <mat-error *ngIf="signupForm.controls['role'].hasError('required')">
+                Please select a role (Client or Customer)
+              </mat-error>
+            </div>
+          </div> -->
+        </mat-card-content>
+  
+        <mat-card-actions>
+          <button mat-raised-button color="primary" type="submit">Register</button>
+        </mat-card-actions>
+       <div class="acc_redirect">
+        <p>Have an account?</p>
+        <a routerLink="login" class="anchor">Login</a>
+       </div>
+      </mat-card>
+  
+  
+  
+  
+    </form>
+  </div>
+  

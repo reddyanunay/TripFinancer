@@ -9,18 +9,36 @@ export class ApicallsService {
   constructor(private http: HttpClient) {}
   private apiUrl = 'http://localhost:8087';
 
+  loginUser(userLogin:any):any{
+    this.setAuthentication();
+    return this.http.post<any>('',userLogin)
+  }
+
+  logoutUser(){
+    localStorage.removeItem('user');
+    localStorage.removeItem('authenticated');
+  }
+  setAuthentication(){
+    localStorage.setItem('authenticated','true');
+  }
+  isAuthentication():boolean{
+    return localStorage.getItem('authenticated')==='true'?true:false;
+  }
+
 
   
   postTrip(trip:any): Observable<any> {
     return this.http.post(`${this.apiUrl}/api/trips/trip`,trip).pipe(
       tap((response: any) => {
         const tripId = response?.tripId;
-      if (tripId) {
-        sessionStorage.setItem('tripId', tripId);
-      }
-    }
-    )
-  );
+        if (tripId) {
+          sessionStorage.setItem('tripId', tripId);
+        }
+      })
+    );
+  }
+  registerUser(user:any): Observable<any> {
+    return this.http.post('',user);
   }
 
   //here data should be of format Map<string,object> (memberNames,trip) as fields,

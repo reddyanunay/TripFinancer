@@ -1,12 +1,81 @@
+/* Navbar General Styling */
 .navbar {
-    position: sticky;
-    top: 0;
-    width: 100%;
-    background-color: #3f51b5;
-    color: #fff;
-    display: flex;
-    padding: 0 16px;
-    align-items: center;
-    height: 56px;
-    font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px 20px;
+}
+
+/* Brand Styling */
+.navbar-brand {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #007bff;
+  text-decoration: none;
+}
+
+/* Buttons Styling */
+.buttontheme1, .buttontheme2 {
+  border: none;
+  padding: 10px 15px;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.buttontheme1 {
+  background-color: #007bff;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.buttontheme1:hover {
+  background-color: #0056b3;
+}
+
+.buttontheme2 {
+  background-color: #6c757d;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.buttontheme2:hover {
+  background-color: #5a6268;
+}
+
+/* Anchors inside buttons */
+.anchor1, .anchor2 {
+  color: white;
+  text-decoration: none;
+}
+
+.anchor2 {
+  color: #fff;
+}
+
+.anchor1:hover, .anchor2:hover {
+  text-decoration: underline;
+}
+
+/* Flexbox for alignment */
+.container-fluid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Spacing for buttons */
+.text-end {
+  margin-left: auto; /* Pushes buttons to the right */
+}
+
+@media (max-width: 992px) {
+  .navbar-brand {
+    font-size: 1.5rem;
   }
+  
+  .text-end {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}

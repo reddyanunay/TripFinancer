@@ -14,6 +14,27 @@
       Add login/logout buttons or user-related actions here
     </div>
   </nav> -->
-  <div class="navbar">
+  <!-- <div class="navbar">
     Trip Financer
+  </div> -->
+
+  <div>
+    <nav class=" nav navbar navbar-expand-lg navbar-light bg-light p-3">
+      <div class="container-fluid">
+        <a class="navbar-brand" routerLink="/home">Trip Financer</a>       
+        <div class="items collapse navbar-collapse" id="navbarSupportedContent">
+          <div *ngIf="!this.ser.isAuthentication()" class="text-end">
+            <button class="buttontheme1"><a  routerLink="/signup" class="anchor2 me-2">Sign Up</a> </button> 
+            <button class="buttontheme2"><a  routerLink="/login" class="anchor1 me-2">Login</a></button>
+          </div>
+          <div *ngIf="this.ser.isAuthentication()" class="text-end">
+            <button class="buttontheme1"><a  routerLink="#" class="anchor2 me-2" (click)="onlogout()">Log Out</a> </button> 
+          </div>
+            <!-- <a routerLink="/showappointments">slots</a> -->
+        </div>
+       </div>
+      
+    </nav>
+  
+  
   </div>
