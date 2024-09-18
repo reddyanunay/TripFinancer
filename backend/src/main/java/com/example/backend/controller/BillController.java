@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
-@RequestMapping("/api/bills")
+@RequestMapping(value = "/api/bills", method = RequestMethod.OPTIONS)
 public class BillController {
     @Autowired
     private BillService billService;

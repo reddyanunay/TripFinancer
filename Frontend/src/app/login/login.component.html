@@ -1,0 +1,72 @@
+
+<div>
+    <form [formGroup]="loginForm" novalidate (ngSubmit)="onSubmit()">
+        <mat-card class="shipping-card">
+            <mat-card-header>
+                <mat-card-title>Login Information</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+
+
+                <!-- Other form fields... -->
+
+                <div class="row">
+                    <div class="col">
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Email" formControlName="email">
+                            <mat-error *ngIf="loginForm.controls['email'].hasError('required')">
+                                Email is <strong>required</strong>
+                            </mat-error>
+                            <mat-error *ngIf="loginForm.controls['email'].hasError('email')">
+                                Please enter a valid email address
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <!-- Other form fields... -->
+                <!-- Other form fields... -->
+
+
+
+                <!-- Other form fields... -->
+
+                <div class="row">
+                    <div class="col">
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Password" type="password" formControlName="password">
+                            <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
+                                Password is <strong>required</strong>
+                            </mat-error>
+                            <mat-error *ngIf="loginForm.controls['password'].hasError('minlength')">
+                                Password should be at least 8 characters long
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- Other form fields... -->
+
+                <!-- Other form fields... -->
+                <div *ngIf="errorMessage" class="alert alert-warning" style="margin-top: 15px;">
+                    {{ errorMessage }}
+                </div>
+
+
+
+
+            </mat-card-content>
+
+            <mat-card-actions>
+                <button mat-raised-button color="primary" type="submit">Login</button>
+            </mat-card-actions>
+            <div class="acc_redirect">
+                <p>Don't have an account?</p>
+                <a routerLink="/app-signup-form" class="anchor">Create Account</a>
+            </div>
+        </mat-card>
+
+
+
+
+    </form>
+</div>

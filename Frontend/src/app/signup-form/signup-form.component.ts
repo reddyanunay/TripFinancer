@@ -38,7 +38,7 @@ export class SignupFormComponent {
         // this.scall.sendEmail().subscribe((data: any)=> {
         //   console.log(data)
         // })
-        this.router.navigate(['/login']);
+        this.router.navigate(['/app-login']);
       })
      
       

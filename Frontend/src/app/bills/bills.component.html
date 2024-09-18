@@ -10,45 +10,48 @@
   <ul class="bills-list">
     <li *ngFor="let bill of bills" (click)="openBillModal(bill)" class="bill-item">
       <span class="left-item">{{ bill.description }}</span>
-      <span class="right-item">{{ bill.billAmount }}</span>
+      <span class="right-item">{{ bill.billAmount | currency:'INR':'symbol':'1.2-2' }}</span>
     </li>
   </ul>
 
   <!-- Modal for Creating/Editing a Bill -->
   <div class="modal-backdrop" *ngIf="isModalOpen">
     <div class="modal-content">
-      <h3>{{ selectedBill ? 'Edit Bill' : 'Create Bill' }}
+      <h3>
+        {{ selectedBill ? 'Edit Bill' : 'Create Bill' }}
         <button *ngIf="selectedBill" type="button" (click)="deleteBill(selectedBill.billId)" class="delete-button">Delete</button>
       </h3>
 
       <form [formGroup]="billForm" (ngSubmit)="onSubmit()">
-        <label for="description">Description:</label>
-        <input type="text" id="description" formControlName="description">
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <input type="text" id="description" formControlName="description" />
+        </div>
 
-        <label for="billAmount">Amount:</label>
-        <input type="number" id="billAmount" formControlName="billAmount">
+        <div class="form-group">
+          <label for="billAmount">Amount:</label>
+          <input type="number" id="billAmount" formControlName="billAmount" />
+        </div>
 
         <!-- Members -->
         <div formArrayName="members">
-          <div *ngFor="let memberControl of members.controls; let i = index" [formGroupName]="i">
+          <div *ngFor="let memberControl of members.controls; let i = index" [formGroupName]="i" class="form-array-item">
             <label>
-              <input type="checkbox" formControlName="selected" (change)="onMemberSelectChange(i)">
+              <input type="checkbox" formControlName="selected" (change)="onMemberSelectChange(i)" />
               {{ memberControl.get('name')?.value }}
             </label>
             <label for="amount">Share:</label>
-            <input type="number" id="amount" formControlName="amount" [disabled]="!memberControl.get('selected')?.value">
-            <!-- Toggle button for selecting who paid -->
-            <button type="button" 
-              (click)="setPaidByMember(i)" 
-              [disabled]="!memberControl.get('selected')?.value" 
-              [class.paid-member]="isPaidByMember(i)">
+            <input type="number" id="amount" formControlName="amount" [disabled]="!memberControl.get('selected')?.value" class="share-input" />
+            <button type="button" (click)="setPaidByMember(i)" [ngClass]="{'paid-member': isPaidByMember(i)}" class="set-paid-button">
               Set as Paid By
             </button>
           </div>
         </div>
 
-        <button type="submit">{{ selectedBill ? 'Update Bill' : 'Create Bill' }}</button>
-        <button type="button" (click)="closeModal()">Cancel</button>
+        <div class="form-actions">
+          <button type="submit" class="submit-button">{{ selectedBill ? 'Update Bill' : 'Create Bill' }}</button>
+          <button type="button" (click)="closeModal()" class="cancel-button">Cancel</button>
+        </div>
       </form>
     </div>
   </div>

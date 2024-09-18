@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { UserData } from './UserData';
 
 @Injectable({
   providedIn: 'root'
@@ -8,15 +9,30 @@ import { Observable, tap } from 'rxjs';
 export class ApicallsService {
   constructor(private http: HttpClient) {}
   private apiUrl = 'http://localhost:8087';
+  user:UserData={
+    email:'',
+    firstName:'',
+    lastName:'',
+    role:''
+  }
+  tempTripId:any;
+
+  saveToken(token: string): void {
+    localStorage.setItem('authToken', token); // or sessionStorage.setItem
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('authToken'); // or sessionStorage.getItem
+  }
 
   loginUser(userLogin:any):any{
-    this.setAuthentication();
-    return this.http.post<any>('',userLogin)
+    return this.http.post<any>(`${this.apiUrl}/api/users/login`,userLogin)
   }
 
   logoutUser(){
     localStorage.removeItem('user');
     localStorage.removeItem('authenticated');
+    localStorage.removeItem('authToken');
   }
   setAuthentication(){
     localStorage.setItem('authenticated','true');
@@ -24,21 +40,33 @@ export class ApicallsService {
   isAuthentication():boolean{
     return localStorage.getItem('authenticated')==='true'?true:false;
   }
+  setUserData(UserLogin:any){
+    localStorage.setItem('email',UserLogin.email);
+    localStorage.setItem('firstName',UserLogin.firstName);
+    localStorage.setItem('lastName',UserLogin.lastName);
+    // localStorage.setItem('role',UserLogin.role);
+  }
+  getUserFromLocalStorage():any {
+    this.user.email=localStorage.getItem('email') as string;
+    this.user.firstName=localStorage.getItem('firstName') as string;
+    this.user.lastName=localStorage.getItem('lastName') as string;
+    this.user.role=localStorage.getItem('role') as string;
+    return this.user;
+  }
 
 
   
   postTrip(trip:any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/api/trips/trip`,trip).pipe(
-      tap((response: any) => {
-        const tripId = response?.tripId;
-        if (tripId) {
-          sessionStorage.setItem('tripId', tripId);
-        }
-      })
-    );
+    return this.http.post(`${this.apiUrl}/api/trips/trip`,trip);
+  }
+  getTrips(email:any):Observable<any>{
+    return this.http.get(`${this.apiUrl}/api/trips/getTripsWithEmail/${email}`)
+  }
+  deleteTrip(tripId:number):Observable<String>{
+    return this.http.delete<String>(`${this.apiUrl}/api/trips/delete/${tripId}`, { responseType: 'text' as 'json' });
   }
   registerUser(user:any): Observable<any> {
-    return this.http.post('',user);
+    return this.http.post(`${this.apiUrl}/api/users/register`,user);
   }
 
   //here data should be of format Map<string,object> (memberNames,trip) as fields,

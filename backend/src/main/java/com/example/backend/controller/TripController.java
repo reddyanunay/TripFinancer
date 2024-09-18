@@ -11,8 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @RestController
-@RequestMapping("/api/trips")
+@RequestMapping(value = "/api/trips", method = RequestMethod.OPTIONS)
 public class TripController {
     @Autowired
     private TripService tripService;
@@ -24,6 +25,10 @@ public class TripController {
     public ResponseEntity<?> saveTrip(@RequestBody TripRequestDTO tripRequest) throws UserNotFoundException {
         Trip trip = tripService.createTrip(tripRequest);
         return new ResponseEntity<Trip>(trip, HttpStatus.CREATED);
+    }
+    @GetMapping("/getTripsWithEmail/{email}")
+    public ResponseEntity<?> getTripsByEmail(@PathVariable String email) {
+        return new ResponseEntity<>(tripService.getTripsByEmail(email),HttpStatus.OK);
     }
 
     @GetMapping("/trip/{id}")

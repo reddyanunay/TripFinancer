@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ApicallsService } from '../apicalls.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-bills',
@@ -14,8 +15,9 @@ export class BillsComponent {
   isModalOpen = false;
   selectedBill: any = null;
   billForm: FormGroup;
+  tripId:any =0;
 
-  constructor(private fb: FormBuilder, private billService: ApicallsService) {
+  constructor(private fb: FormBuilder, private billService: ApicallsService,private route:ActivatedRoute) {
     this.billForm = this.fb.group({
       billId: [null], 
       billAmount: [''],
@@ -27,6 +29,8 @@ export class BillsComponent {
   }
 
   ngOnInit(): void {
+    this.tripId = this.billService.tempTripId;
+    console.log(this.tripId);
     this.getBills();
     this.getMembers();
   }
@@ -36,7 +40,7 @@ export class BillsComponent {
   }
 
   getMembers() {
-    this.billService.getMembers(sessionStorage.getItem('tripId')).subscribe(
+    this.billService.getMembers(this.tripId).subscribe(
       (data: any[]) => {
         this.allMembers = data;
         this.initializeNewMembersFormArray();
@@ -90,7 +94,7 @@ export class BillsComponent {
   }
 
   getBills(): void {
-    this.billService.getBills(sessionStorage.getItem('tripId')).subscribe(
+    this.billService.getBills(this.tripId).subscribe(
       (data: any[]) => {
         this.bills = data;
       },
@@ -178,7 +182,7 @@ export class BillsComponent {
       description: this.billForm.get('description')?.value,
       billAmount: this.billForm.get('billAmount')?.value,
       paidByMemberId: this.billForm.get('paidByMember')?.value,
-      trip: sessionStorage.getItem('tripId'),
+      trip: this.tripId,
       allExpenses: selectedMembers
     };
     this.calculateExpenseList(selectedMembers);

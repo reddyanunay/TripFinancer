@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
-@RequestMapping("/api/expenses")
+@RequestMapping(value = "/api/expenses", method = RequestMethod.OPTIONS)
 public class ExpenseController {
     @Autowired
     private ExpenseService expServ;

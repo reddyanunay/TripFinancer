@@ -38,6 +38,7 @@ export class CreateTripComponent {
   handleSuccess(response: any): void {
     // Process the response if needed, then navigate to the next page
     console.log('Trip successfully Created:', response);
+    this.apiser.tempTripId=response.tripId;
     // After successful response, navigate to the next page
     this.router.navigate(['/app-bills']);  // Replace '/next-page' with the actual route
   }
@@ -47,9 +48,11 @@ export class CreateTripComponent {
     const tripData = {
       tripName: formValue.trip_name,
       noOfPeople: formValue.no_of_people,
-      members: formValue.members
+      members: formValue.members,
+      email:this.apiser.getUserFromLocalStorage().email
     };
     console.log('Trip data:', tripData);
+    console.log('token',this.apiser.getToken());
     this.apiser.postTrip(tripData).subscribe(
       (response:any)=>{
         this.Trip=response;

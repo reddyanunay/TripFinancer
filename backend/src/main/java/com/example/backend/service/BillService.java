@@ -32,6 +32,7 @@ public class BillService {
     }
     @Transactional
     public Bill createBillWithExpenses(BillRequestDTO billDto){
+        System.out.println("BillDto: " + billDto);
         Bill bill = new Bill();
         bill.setBillAmount(billDto.getBillAmount());
         bill.setDescription(billDto.getDescription());

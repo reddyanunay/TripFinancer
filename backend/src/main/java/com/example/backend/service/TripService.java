@@ -53,6 +53,9 @@ public class TripService {
     public Trip getTrip(Long id) {
         return tripRepo.findById(id).orElse(null);
     }
+    public List<Trip> getTripsByEmail(String email) {
+        return tripRepo.findByUserEmail(email);
+    }
     public void deleteTrip(Long id) {
         tripRepo.deleteById(id);
     }

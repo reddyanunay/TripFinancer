@@ -14,8 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 
+@CrossOrigin
 @RestController
-@RequestMapping("/api/members")
+@RequestMapping(value = "/api/members", method = RequestMethod.OPTIONS)
 public class MemberController {
     @Autowired
     private ObjectMapper objectMapper;
