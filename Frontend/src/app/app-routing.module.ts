@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { authGuard } from './auth.guard';
 import { HomeComponent } from './home/home.component';
+import { AnalysisComponent } from './analysis/analysis.component';
 
 const routes: Routes = [
   {path:'',redirectTo:'home',pathMatch:'full'},
@@ -15,6 +16,7 @@ const routes: Routes = [
   {path:'app-create-trip', component : CreateTripComponent,canActivate:[authGuard]},
   {path:'app-bills', component : BillsComponent,canActivate:[authGuard]},
   {path:'app-login', component : LoginComponent},
+  {path:'app-analysis',component:AnalysisComponent,canActivate:[authGuard]},
   {path:'app-user-profile',component:UserProfileComponent,canActivate:[authGuard]},
 ];
 

@@ -17,7 +17,7 @@ export class BillsComponent {
   billForm: FormGroup;
   tripId:any =0;
 
-  constructor(private fb: FormBuilder, private billService: ApicallsService,private route:ActivatedRoute) {
+  constructor(private fb: FormBuilder, private billService: ApicallsService,private route:ActivatedRoute,private router:Router) {
     this.billForm = this.fb.group({
       billId: [null], 
       billAmount: [''],
@@ -102,6 +102,10 @@ export class BillsComponent {
         console.error('Error fetching bills', error);
       }
     );
+  }
+
+  analyseTrip(){
+    this.router.navigate(['/app-analysis']);
   }
 
   openBillModal(bill: any = null): void {

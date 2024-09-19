@@ -1,0 +1,29 @@
+.tabs-container {
+  display: flex;
+}
+
+.tabs {
+  width: 200px;
+  border-right: 1px solid #ddd;
+  padding: 10px;
+}
+
+.tab {
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  background-color: transparent; /* Default background */
+  border-bottom: 2px solid transparent; /* Underline styling */
+  transition: background-color 0.3s, border-bottom 0.3s;
+}
+
+.tab.active {
+  background-color: #f5f5f5; /* Background color when active */
+  border-bottom: 2px solid #007bff; /* Color of the underline when active */
+  font-weight: bold; /* Optionally make the text bold */
+}
+
+.tab:hover {
+  background-color: #e9ecef; /* Background color on hover */
+}

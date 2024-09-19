@@ -19,6 +19,7 @@ import { LoginComponent } from './login/login.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AuthInterceptor } from './auth.interceptor';
 import { HomeComponent } from './home/home.component';
+import { AnalysisComponent } from './analysis/analysis.component';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { HomeComponent } from './home/home.component';
     LoginComponent,
     UserProfileComponent,
     HomeComponent,
+    AnalysisComponent,
   ],
   imports: [
     BrowserModule,

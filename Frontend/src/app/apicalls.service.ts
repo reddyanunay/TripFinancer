@@ -90,4 +90,14 @@ export class ApicallsService {
   deleteBill(billId:any) : Observable<any>{
     return this.http.delete<string>(`${this.apiUrl}/api/bills/delete/${billId}`, { responseType: 'text' as 'json' });
   }
+
+
+  //Analysis endpoints
+  getTotalTripSummary(tripId:any):Observable<any>{
+    return this.http.get(`${this.apiUrl}/api/trips/${tripId}/summary`);
+  }
+
+  getAnalysisForMember(extUrl: string): Observable<any> {
+    return this.http.get<any>(this.apiUrl+extUrl);
+  }
 }
