@@ -1,31 +1,31 @@
 <div class="tabs-container">
-    <div class="tabs">
-      <div
-        *ngFor="let member of members"
-        [class.active]="selectedMemberId === member.memberId"
-        (click)="selectMember(member.memberId)"
-        class="tab"
-      >
-        {{ member.name }}
-      </div>
-      <div
-        [class.active]="selectedMemberId === 'total'"
-        (click)="selectMember('total')"
-        class="tab"
-      >
-        Total
-      </div>
+  <div class="tabs">
+    <div
+      *ngFor="let member of members"
+      [class.active]="selectedMemberId === member.memberId"
+      (click)="selectMember(member.memberId)"
+      class="tab"
+    >
+      {{ member.name }}
     </div>
-  
-    <div class="tab-content">
-      <!-- Heading that updates based on selected tab -->
-      <h2>{{ selectedMemberId === 'total' ? 'Overall Trip Analysis' : getMemberName(selectedMemberId) }}</h2>
-  
-      <!-- Content displayed based on selected tab -->
-      <ng-container *ngIf="analysisData">
-        <!-- Replace with your detailed content -->
-        <pre>{{ analysisData | json }}</pre>
-      </ng-container>
+    <div
+      [class.active]="selectedMemberId === 'total'"
+      (click)="selectMember('total')"
+      class="tab"
+    >
+      Total
     </div>
   </div>
-  
+
+  <div class="tab-content">
+    <!-- Heading that updates based on selected tab -->
+    <h2>{{ selectedMemberId === 'total' ? 'Overall Trip Analysis' : getMemberName(selectedMemberId) }}</h2>
+
+    <!-- Content displayed based on selected tab -->
+    <ng-container *ngIf="analysisData">
+      <!-- Replace with your detailed content -->
+       
+      <pre>{{ analysisData | json }}</pre>
+    </ng-container>
+  </div>
+</div>

@@ -66,10 +66,8 @@ public class AnalysisService {
     public Map<String, Object> getMemberSummary(Long tripId, Long memberId) {
         List<Bill> bills = billRepo.findByTrip_TripId(tripId);
 
-        // Calculate total trip cost
+        // Existing calculations
         double totalCost = calculateTotalCost(bills);
-
-        // Calculate member-specific details
         double totalSpent = calculateTotalSpent(bills, memberId);
         double totalOwed = calculateTotalOwed(bills, memberId);
         double totalToReceive = calculateTotalToReceive(bills, memberId);
@@ -79,8 +77,8 @@ public class AnalysisService {
         double percentExpenditure = calculatePercentExpenditure(totalCost, totalExpenditureForMember);
         Map<Long, Map<String, Object>> comparativeAnalysis = getComparativeAnalysis(bills, memberId);
 
-        // Generate graphs (you might need to prepare data for this)
-        // This is typically done in the frontend, but you can prepare data if needed
+        // Calculate debts
+        List<Map<String, Object>> debts = calculateTotalDebts(bills, memberId);
 
         Map<String, Object> summary = new HashMap<>();
         summary.put("memberId", memberId);
@@ -93,10 +91,11 @@ public class AnalysisService {
         summary.put("percentExpenditure", percentExpenditure);
         summary.put("billBreakdown", billBreakdown);
         summary.put("comparativeAnalysis", comparativeAnalysis);
-        // Add any other data for graphs if needed
+        summary.put("debts", debts);  // Add debts to the summary
 
         return summary;
     }
+
 
     public double calculateTotalSpent(List<Bill> bills, Long memberId) {
         return bills.stream()
@@ -105,17 +104,19 @@ public class AnalysisService {
                 .sum();
     }
     public double calculateTotalOwed(List<Bill> bills, Long memberId) {
+        // Calculate how much the member owes to others
         return bills.stream()
-                .flatMap(bill -> bill.getBill_all_expenses().stream()
-                .filter(expense -> expense.getMember().getMemberId().equals(memberId) && bill.getPaidByMember().getMemberId() != memberId))
-                .mapToDouble(Expense::getShare)
+                .flatMapToDouble(bill -> bill.getBill_all_expenses().stream()
+                        .filter(expense -> expense.getMember().getMemberId().equals(memberId) && !bill.getPaidByMember().getMemberId().equals(memberId))
+                        .mapToDouble(Expense::getShare))
                 .sum();
     }
     public double calculateTotalToReceive(List<Bill> bills, Long memberId) {
+        // Calculate how much others owe to the member
         return bills.stream()
-                .flatMap(bill -> bill.getBill_all_expenses().stream()
-                .filter(expense -> expense.getMember().getMemberId().equals(memberId) && !bill.getPaidByMember().getMemberId().equals(memberId)))
-                .mapToDouble(Expense::getShare)
+                .flatMapToDouble(bill -> bill.getBill_all_expenses().stream()
+                        .filter(expense -> !expense.getMember().getMemberId().equals(memberId) && bill.getPaidByMember().getMemberId().equals(memberId))
+                        .mapToDouble(Expense::getShare))
                 .sum();
     }
     public List<Map<String, Object>> getBillsPaid(List<Bill> bills, Long memberId) {
@@ -180,6 +181,48 @@ public class AnalysisService {
                 .mapToDouble(Expense::getShare)
                 .sum();
     }
+    public List<Map<String, Object>> calculateTotalDebts(List<Bill> bills, Long memberId) {
+        List<Map<String, Object>> debts = new ArrayList<>();
+        double totalOwed = 0;
+        double totalToReceive = 0;
+        Map<Long, Double> netAmounts = new HashMap<>();
+
+        for (Bill bill : bills) {
+            Long creditorId = bill.getPaidByMember().getMemberId();
+
+            for (Expense expense : bill.getBill_all_expenses()) {
+                Long debtorId = expense.getMember().getMemberId();
+                double amount = expense.getShare();
+
+                if (debtorId.equals(memberId) && !creditorId.equals(memberId)) {
+                    totalOwed += amount;
+                    netAmounts.put(creditorId, netAmounts.getOrDefault(creditorId, 0.0) - amount);
+                } else if (creditorId.equals(memberId) && !debtorId.equals(memberId)) {
+                    totalToReceive += amount;
+                    netAmounts.put(debtorId, netAmounts.getOrDefault(debtorId, 0.0) + amount);
+                }
+            }
+        }
+
+        // Add net amounts to the debts list using the createDebtEntry method
+        for (Map.Entry<Long, Double> entry : netAmounts.entrySet()) {
+            debts.add(createDebtEntry(entry.getKey(), entry.getValue()));
+        }
+
+        return debts;
+    }
+
+    // Helper method to create the debt entry
+    private Map<String, Object> createDebtEntry(Long memberId, double amount) {
+        return Map.of(
+                "memberId", memberId,
+                "netAmount", amount
+        );
+    }
+
+
+
+
 
 
 
