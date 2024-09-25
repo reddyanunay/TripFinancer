@@ -11,41 +11,89 @@
     <div
       [class.active]="selectedMemberId === 'total'"
       (click)="selectMember('total')"
-      class="tab"
+      class="tab total-tab"
     >
       Total
     </div>
   </div>
+</div>
 
-  <div class="tab-content">
-    <!-- Heading that updates based on selected tab -->
-    <h1>{{ selectedMemberId === 'total' ? 'Overall Trip Analysis' : getMemberName(selectedMemberId) }}</h1>
+<div class="tab-content">
+  <h1 class="display-name">{{ selectedMemberId === 'total' ? 'Overall Trip Analysis' : (getMemberName(selectedMemberId)+'`s Analysis') }}</h1>
 
-    <!-- Content displayed based on selected tab -->
-    <ng-container *ngIf="analysisData">
-      <div *ngIf="selectedMemberId !== 'total'">
-        <div>
-          <h2>Debts to Settle</h2>
-          <table>
-            <tr>
-              <th>Member</th>
-              <th>Amount</th>
-            </tr>
-            <tr *ngFor="let debt of analysisData.debts">
-              <td>{{ getMemberName(debt.memberId) }}</td>
-              <td>{{ debt.netAmount }}</td>
-            </tr>
-          </table>
+  <ng-container *ngIf="analysisData">
+    <div *ngIf="selectedMemberId !== 'total'">
+
+      <!--Debts Table-->
+      <nz-table #basicTable [nzFrontPagination]="false" [nzData]="analysisData.debts">
+        <thead>
+          <tr>
+            <th style="font-weight: 500; font-size: medium;">Member</th>
+            <th style="font-weight: 500;font-size: medium;">Debt Status</th>
+            <th style="font-weight: 500;font-size: medium;">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of basicTable.data">
+            <td>{{ getMemberName(data.memberId) }}</td>
+            <td>
+              <ng-container *ngIf="data.netAmount < 0">
+                You owe {{ getMemberName(data.memberId) }}
+              </ng-container>
+              <ng-container *ngIf="data.netAmount >= 0">
+                {{ getMemberName(data.memberId) }} owes you
+              </ng-container>
+            </td>
+            <td [ngClass]="{ 'amount-positive': data.netAmount >= 0, 'amount-negative': data.netAmount < 0 }">
+              {{ data.netAmount < 0 ? -data.netAmount : data.netAmount }}
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+
+      <!--Debt Summary-->
+      <div class="total-cards">
+        <div nz-row [nzGutter]="6">
+          <div nz-col [nzSpan]="6">
+            <nz-card nzTitle="Total Expenditure">
+              <p>{{analysisData.totalExpenditure}}</p>
+            </nz-card>
+          </div>
+          <div nz-col [nzSpan]="6">
+            <nz-card nzTitle="Total to receive">
+              <p>{{analysisData.totalToReceive}}</p>
+            </nz-card>
+          </div>
+          <div nz-col [nzSpan]="6">
+            <nz-card nzTitle="Total owe">
+              <p>{{analysisData.totalOwed}}</p>
+            </nz-card>
+          </div>
+          <div nz-col [nzSpan]="6">
+            <nz-card nzTitle="Net Debt">
+              @if ((analysisData.totalToReceive - analysisData.totalOwed)<0) {<p style="color: #dc3545;font-weight: bold;">{{analysisData.totalOwed - analysisData.totalToReceive}}</p>}
+              @else{<p style="color: #28a745;font-weight: bold;">{{analysisData.totalToReceive - analysisData.totalOwed}}</p>}
+            </nz-card>
+          </div>
         </div>
-
       </div>
-      <div *ngIf="selectedMemberId === 'total'">
 
+      <!--Bill Breakdown progress bar-->
+      <!-- <div class="progress-container">
+        <div class="progress-bar" [style.width.%]="100" title="Total Expenditure">
+          <div *ngFor="let bill of analysisData.billBreakdown" 
+               [ngStyle]="{ 'width.%': (bill.amount/analysisData.totalExpenditure)*100 }"
+               [class]="getBillClass(bill.billName)"
+               [title]="bill.billName + ': ' + bill.amount">
+      
+          </div>
+        </div>
+      </div> -->
 
-      </div>
-      <!-- Replace with your detailed content -->
-       
-      <pre>{{ analysisData | json }}</pre>
-    </ng-container>
-  </div>
+    </div>
+    <div *ngIf="selectedMemberId === 'total'">
+      <!-- Total analysis content -->
+    </div>
+    <pre>{{ analysisData | json }}</pre>
+  </ng-container>
 </div>

@@ -19,8 +19,12 @@
     </section>
   
     <section class="cta">
-      <p>Start Your Next Adventure with TripFinancer! Create your first trip and start tracking today.</p>
-      <a routerLink="/app-signup-form" class="btn-register" *ngIf="!isLoggedIn">Register Now</a>
+      <nz-alert
+        nzType="info"
+        nzMessage="Start Your Next Adventure with TripFinancer!"
+        nzDescription="Create your first trip and start tracking today."
+        [nzShowIcon]="true">
+      </nz-alert>
+      <a routerLink="/app-signup-form" nz-button nzType="primary" *ngIf="!isLoggedIn">Register Now</a>
     </section>
   </div>
-  

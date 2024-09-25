@@ -1,23 +1,3 @@
-<!-- <nav class="navbar">
-    <div class="navbar-logo">
-      <img src="assets/logo.png" alt="My App Logo" />
-    </div>
-    <div>Trip Financer</div>
-    <ul class="navbar-links">
-      <li><a routerLink="/">Home</a></li>
-      <li><a routerLink="/about">About</a></li>
-  <li><a routerLink="/about">Services</a></li>
-  <li><a routerLink="/about">About</a></li>
-      <li><a routerLink="/contact">Blog</a></li>
-    </ul>
-    <div class="navbar-actions">
-      Add login/logout buttons or user-related actions here
-    </div>
-  </nav> -->
-  <!-- <div class="navbar">
-    Trip Financer
-  </div> -->
-
   <div>
     <nav class=" nav navbar navbar-expand-lg navbar-light bg-light p-3">
       <div class="container-fluid">
@@ -29,13 +9,11 @@
           </div>
           <div *ngIf="this.ser.isAuthentication()" class="text-end">
             <button class="buttontheme1"><a  routerLink="/app-user-profile" class="anchor2 me-2" (click)="yourTrips()">Your Trips</a> </button>
-            <button class="buttontheme1"><a  routerLink="#" class="anchor2 me-2" (click)="onlogout()">Log Out</a> </button> 
+            <button class="buttontheme1"><a  routerLink="#" class="anchor2 me-2" (click)="onLogout()">Log Out</a> </button> 
           </div>
-            <!-- <a routerLink="/showappointments">slots</a> -->
         </div>
        </div>
-      
     </nav>
-  
-  
   </div>
+  
+  

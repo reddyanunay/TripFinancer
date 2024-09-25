@@ -1,29 +1,87 @@
 .tabs-container {
-  display: flex;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 200px;
+  height: calc(100vh - 60px);
+  background-color: #f8f9fa; /* Lighter grey background */
+  z-index: 10;
+  padding-top: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .tabs {
-  width: 200px;
-  border-right: 1px solid #ddd;
-  padding: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .tab {
-  padding: 10px;
+  padding: 10px 20px;
+  color: #007bff; /* Blue text for tabs */
+  background-color: #ffffff; /* White background for tabs */
+  border: 1px solid #dee2e6; /* Light grey border between tabs */
   cursor: pointer;
-  border-radius: 5px;
-  margin-bottom: 5px;
-  background-color: transparent; /* Default background */
-  border-bottom: 2px solid transparent; /* Underline styling */
-  transition: background-color 0.3s, border-bottom 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 .tab.active {
-  background-color: #f5f5f5; /* Background color when active */
-  border-bottom: 2px solid #007bff; /* Color of the underline when active */
-  font-weight: bold; /* Optionally make the text bold */
+  background-color: #D2E0FB; /* Grey background for active tab */
+  color: #007bff; /* White text for active tab */
 }
 
 .tab:hover {
-  background-color: #e9ecef; /* Background color on hover */
+  background-color: #D2E0FB; /* Light blue on hover */
+}
+
+.tab.total-tab {
+  background-color: #f8f9fa; /* Blue background for Total tab */
+  color: #007bff; /* White text for Total tab */
+  font-weight: bold; /* Make it stand out */
+}
+
+.tab.total-tab:hover {
+  background-color: #D2E0FB; /* Darker blue on hover */
+}
+
+.tab-content {
+  margin-left: 220px;
+  padding: 20px;
+}
+.display-name{
+  font-size: 24px;
+  font-weight: bold;
+  color: #343a40; /* Dark grey color */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  background-color: #007bff; /* Blue header */
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+tbody td {
+  padding: 12px;
+  text-align: left;
+}
+
+/* Positive and Negative Amounts */
+.amount-positive {
+  color: #28a745; /* Green for positive amount */
+  font-weight: bold;
+}
+
+.amount-negative {
+  color: #dc3545; /* Red for negative amount */
+  font-weight: bold;
 }

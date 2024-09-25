@@ -113,4 +113,16 @@ export class AnalysisComponent implements OnInit {
     return member ? member.name : 'Unknown Member';
   }
 
+  // getBillClass(billName: string): string {
+  //   const colors = {
+  //     "Biryani": "bill-biryani",
+  //     "Badminton": "bill-badminton",
+  //     "Bus charges": "bill-bus",
+  //     "Car rent": "bill-car",
+  //     "Room": "bill-room",
+  //     "Chicken": "bill-chicken",
+  //   };
+  //   return colors[billName] || "bill-default";
+  // }
+
 }

@@ -1,0 +1,28 @@
+.layout {
+    min-height: 100vh;
+}
+router-outlet{
+    display: block;
+    margin: auto;
+    height: 5%;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    overflow: auto;
+    position: relative;
+}
+nz-header {
+  line-height: 35px;
+  padding: 0%;
+  position: fixed;
+  z-index: 10000;
+  margin: auto;
+  width: 100%;
+}
+nz-content {
+    padding: 0 ;
+    margin-top: 80px;
+}
+nz-footer {
+  text-align: center;
+}

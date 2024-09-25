@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ApicallsService } from '../apicalls.service';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,7 +15,7 @@ export class HeaderComponent {
     this.router.navigate(['/app-user-profile']);
   }
 
-  onlogout(){
+  onLogout(){
     this.ser.logoutUser();
     this.router.navigate(['/home']);
   }

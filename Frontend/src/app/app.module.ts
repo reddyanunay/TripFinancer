@@ -24,7 +24,23 @@ import { HomeComponent } from './home/home.component';
 import { AnalysisComponent } from './analysis/analysis.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { BaseChartDirective } from 'ng2-charts';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
+import { NZ_I18N } from 'ng-zorro-antd/i18n';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzListModule } from 'ng-zorro-antd/list';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { en_US } from 'ng-zorro-antd/i18n';
+import en from '@angular/common/locales/en';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+
+registerLocaleData(en);
 
 
 @NgModule({ declarations: [
@@ -50,5 +66,16 @@ import { CommonModule } from '@angular/common';
         NgxChartsModule,
         BaseChartDirective,
         CommonModule,
-        NgxDatatableModule], providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, provideCharts(withDefaultRegisterables()), provideHttpClient(withInterceptorsFromDi())] })
+        NgxDatatableModule,
+        NzCardModule,
+        NzGridModule,
+        NzListModule,
+        NzTableModule,
+        NzLayoutModule,
+        NzAlertModule,
+        NzIconModule,
+        NzMenuModule,
+        NzDropDownModule,
+        NzButtonModule,
+        FormsModule], providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, provideCharts(withDefaultRegisterables()), provideHttpClient(withInterceptorsFromDi()), { provide: NZ_I18N, useValue: en_US }, provideAnimationsAsync(), provideHttpClient()] })
 export class AppModule { }
