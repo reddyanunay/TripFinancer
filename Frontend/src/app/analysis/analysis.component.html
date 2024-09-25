@@ -19,10 +19,30 @@
 
   <div class="tab-content">
     <!-- Heading that updates based on selected tab -->
-    <h2>{{ selectedMemberId === 'total' ? 'Overall Trip Analysis' : getMemberName(selectedMemberId) }}</h2>
+    <h1>{{ selectedMemberId === 'total' ? 'Overall Trip Analysis' : getMemberName(selectedMemberId) }}</h1>
 
     <!-- Content displayed based on selected tab -->
     <ng-container *ngIf="analysisData">
+      <div *ngIf="selectedMemberId !== 'total'">
+        <div>
+          <h2>Debts to Settle</h2>
+          <table>
+            <tr>
+              <th>Member</th>
+              <th>Amount</th>
+            </tr>
+            <tr *ngFor="let debt of analysisData.debts">
+              <td>{{ getMemberName(debt.memberId) }}</td>
+              <td>{{ debt.netAmount }}</td>
+            </tr>
+          </table>
+        </div>
+
+      </div>
+      <div *ngIf="selectedMemberId === 'total'">
+
+
+      </div>
       <!-- Replace with your detailed content -->
        
       <pre>{{ analysisData | json }}</pre>
