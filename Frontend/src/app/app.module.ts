@@ -14,7 +14,7 @@ import { HeaderComponent } from './header/header.component';
 import { BillsComponent } from './bills/bills.component';
 import { CreateTripComponent } from './create-trip/create-trip.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { SignupFormComponent } from './signup-form/signup-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login/login.component';
@@ -27,35 +27,28 @@ import { BaseChartDirective } from 'ng2-charts';
 import { CommonModule } from '@angular/common';
 
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    BillsComponent,
-    CreateTripComponent,
-    SignupFormComponent,
-    LoginComponent,
-    UserProfileComponent,
-    HomeComponent,
-    AnalysisComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,   // If you use buttons
-    MatIconModule,
-    NgxChartsModule,
-    BaseChartDirective,
-    CommonModule,
-    NgxDatatableModule,
-  ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, provideCharts(withDefaultRegisterables())],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        HeaderComponent,
+        BillsComponent,
+        CreateTripComponent,
+        SignupFormComponent,
+        LoginComponent,
+        UserProfileComponent,
+        HomeComponent,
+        AnalysisComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule, // If you use buttons
+        MatIconModule,
+        NgxChartsModule,
+        BaseChartDirective,
+        CommonModule,
+        NgxDatatableModule], providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, provideCharts(withDefaultRegisterables()), provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
