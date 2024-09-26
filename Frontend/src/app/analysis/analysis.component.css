@@ -85,3 +85,81 @@ tbody td {
   color: #dc3545; /* Red for negative amount */
   font-weight: bold;
 }
+.wrap-section{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.total-cards{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.section-headings{
+  margin: auto;
+}
+.progress-bars {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap to the next line */
+  justify-content: center; /* Center items */
+  gap: 20px; /* Space between items */
+  margin-top: 20px;
+  margin-bottom: 20px;
+  max-width: 100%; /* Prevents the container from overflowing */
+}
+
+.progress-bars nz-progress {
+  flex: 1 1 120px; /* Allow the progress bars to shrink and grow */
+  max-width: 150px; /* Optional: set a maximum width for each progress */
+}
+.bar-chart-container {
+  width: 100%; /* Take full width of the parent */
+  height: 400px; /* Set a specific height */
+}
+.cards-container {
+  display: flex;
+  flex-wrap: wrap; /* Allow cards to wrap onto the next line */
+  gap: 20px; /* Space between the cards */
+}
+
+.bill-card {
+  flex: 1 1 200px; /* Allow the cards to grow, shrink, and have a base width of 200px */
+  min-width: 200px; /* Minimum width for smaller screens */
+  max-width: 300px; /* Maximum width for larger screens */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+}
+.ant-page-header {
+  padding: 0;
+}
+.largest-bill-card {
+  background-color: #F0F8FF; /* Light background */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 80%; /* Adjust width as needed */
+}
+
+.chart-container {
+  display: flex;                /* Use flexbox for centering */
+  flex-direction: column;      /* Stack items vertically */
+  align-items: center;         /* Center horizontally */
+  justify-content: center;     /* Center vertically if the container has height */
+  margin: 20px auto;          /* Add some margin and center the wrapper */
+  max-width: 500px; 
+  width: 60%;                 /* Full width of the wrapper */
+  height: 60%;                /* Height will be based on the canvas aspect ratio */
+}
+.bills-list {
+  margin-top: 20px; /* Space above the list */
+}
+
+.bills-list ul {
+  list-style-type: none; /* Remove default list styling */
+  padding: 0; /* Remove padding */
+}
+
+.bills-list li {
+  background-color: #F0F8FF; /* Light background */
+  margin: 5px 0; /* Space between items */
+  padding: 10px;
+  border-radius: 5px; /* Rounded corners */
+}

@@ -25,75 +25,187 @@
     <div *ngIf="selectedMemberId !== 'total'">
 
       <!--Debts Table-->
-      <nz-table #basicTable [nzFrontPagination]="false" [nzData]="analysisData.debts">
-        <thead>
-          <tr>
-            <th style="font-weight: 500; font-size: medium;">Member</th>
-            <th style="font-weight: 500;font-size: medium;">Debt Status</th>
-            <th style="font-weight: 500;font-size: medium;">Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let data of basicTable.data">
-            <td>{{ getMemberName(data.memberId) }}</td>
-            <td>
-              <ng-container *ngIf="data.netAmount < 0">
-                You owe {{ getMemberName(data.memberId) }}
-              </ng-container>
-              <ng-container *ngIf="data.netAmount >= 0">
-                {{ getMemberName(data.memberId) }} owes you
-              </ng-container>
-            </td>
-            <td [ngClass]="{ 'amount-positive': data.netAmount >= 0, 'amount-negative': data.netAmount < 0 }">
-              {{ data.netAmount < 0 ? -data.netAmount : data.netAmount }}
-            </td>
-          </tr>
-        </tbody>
-      </nz-table>
-
+      <div class="wrap-section">
+        <h2 class="section-headings">Your Depts</h2>
+        <nz-table #basicTable [nzFrontPagination]="false" [nzData]="analysisData.debts">
+          <thead>
+            <tr>
+              <th style="font-weight: 500; font-size: medium;">Member</th>
+              <th style="font-weight: 500;font-size: medium;">Debt Status</th>
+              <th style="font-weight: 500;font-size: medium;">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of basicTable.data">
+              <td>{{ getMemberName(data.memberId) }}</td>
+              <td>
+                <ng-container *ngIf="data.netAmount < 0">
+                  You owe {{ getMemberName(data.memberId) }}
+                </ng-container>
+                <ng-container *ngIf="data.netAmount >= 0">
+                  {{ getMemberName(data.memberId) }} owes you
+                </ng-container>
+              </td>
+              <td [ngClass]="{ 'amount-positive': data.netAmount >= 0, 'amount-negative': data.netAmount < 0 }">
+                {{ data.netAmount < 0 ? -data.netAmount : data.netAmount }}
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+      
       <!--Debt Summary-->
-      <div class="total-cards">
-        <div nz-row [nzGutter]="6">
-          <div nz-col [nzSpan]="6">
-            <nz-card nzTitle="Total Expenditure">
-              <p>{{analysisData.totalExpenditure}}</p>
-            </nz-card>
+      <div class="wrap-section">
+        <h2 class="section-headings">Debt Summary</h2>
+        <nz-card>
+          <nz-card nz-card-grid [ngStyle]="gridStyle" nzTitle="Total Expenditure" [nzBodyStyle]="{'justify-content':'center' }">
+            <p>{{analysisData.totalExpenditure}}</p>
+          </nz-card>
+          <nz-card nz-card-grid [ngStyle]="gridStyle" nzTitle="Total to receive" [nzBodyStyle]="{'justify-content':'center' }">
+            <p>{{analysisData.totalToReceive}}</p>
+          </nz-card>
+          <nz-card nz-card-grid [ngStyle]="gridStyle" nzTitle="Total owe" [nzBodyStyle]="{'justify-content':'center' }">
+            <p>{{analysisData.totalOwed}}</p>
+          </nz-card>
+          <nz-card nz-card-grid [ngStyle]="lastGridStyle" nzTitle="Net Debt" [nzBodyStyle]="{'justify-content':'center' }">
+            @if ((analysisData.totalToReceive - analysisData.totalOwed)<0) {<p style="color: #dc3545;font-weight: bold;">{{analysisData.totalOwed - analysisData.totalToReceive}}</p>}
+            @else{<p style="color: #28a745;font-weight: bold;">{{analysisData.totalToReceive - analysisData.totalOwed}}</p>}
+          </nz-card>
+        </nz-card>
+      </div>
+      
+      <!--Bill Breakdown progress bar-->
+      <div class="wrap-section">
+        <h2 class="section-headings">Your Expenditure Towards Each Bill</h2>
+          <div *ngIf="analysisData?.billBreakdown?.length > 0" class="progress-bars">
+            <ng-container *ngFor="let bill of analysisData.billBreakdown; let i = index">
+                <nz-progress [nzType]="'circle'" [nzPercent]="round((bill.amount/analysisData.totalExpenditure)*100)" nz-popover nzPopoverTitle="{{bill.billName}}" nzPopoverContent="₹{{bill.amount}}" [nzStrokeColor]="getBillColor(i)"></nz-progress>
+            </ng-container>
           </div>
-          <div nz-col [nzSpan]="6">
-            <nz-card nzTitle="Total to receive">
-              <p>{{analysisData.totalToReceive}}</p>
-            </nz-card>
-          </div>
-          <div nz-col [nzSpan]="6">
-            <nz-card nzTitle="Total owe">
-              <p>{{analysisData.totalOwed}}</p>
-            </nz-card>
-          </div>
-          <div nz-col [nzSpan]="6">
-            <nz-card nzTitle="Net Debt">
-              @if ((analysisData.totalToReceive - analysisData.totalOwed)<0) {<p style="color: #dc3545;font-weight: bold;">{{analysisData.totalOwed - analysisData.totalToReceive}}</p>}
-              @else{<p style="color: #28a745;font-weight: bold;">{{analysisData.totalToReceive - analysisData.totalOwed}}</p>}
-            </nz-card>
+      </div>
+
+      <!--Comparative Analysis-->
+      <div class="wrap-section">
+        <h2 class="section-headings">Comparative Analysis</h2>
+        <div class="bar-chart-container">
+          <canvas baseChart
+                  [data]="MemberBarChartData"
+                  [options]="MemberBarchartOptions"
+                  [legend]="MemberBarChartLegend"
+                  [type]="'bar'">
+          </canvas>
+        </div>
+      </div>
+
+      <!--Bills Paid By You-->
+      <div class="wrap-section">
+        <h2 class="section-headings">Bills paid by you</h2>
+        <div *ngIf="analysisData?.billsPaid?.length > 0">
+          <div class="cards-container">
+            <ng-container *ngFor="let bill of analysisData.billsPaid">
+              <nz-card nzTitle="{{bill.billName}}" class="bill-card">
+                <p>
+                  ₹{{bill.amountPaid}}
+                </p>
+              </nz-card>
+            </ng-container>
           </div>
         </div>
       </div>
 
-      <!--Bill Breakdown progress bar-->
-      <!-- <div class="progress-container">
-        <div class="progress-bar" [style.width.%]="100" title="Total Expenditure">
-          <div *ngFor="let bill of analysisData.billBreakdown" 
-               [ngStyle]="{ 'width.%': (bill.amount/analysisData.totalExpenditure)*100 }"
-               [class]="getBillClass(bill.billName)"
-               [title]="bill.billName + ': ' + bill.amount">
-      
-          </div>
-        </div>
-      </div> -->
-
     </div>
     <div *ngIf="selectedMemberId === 'total'">
       <!-- Total analysis content -->
+       <div class="wrap-section">
+        <nz-page-header
+          class="site-page-header"
+          nzTitle="Total trip cost">
+          <nz-page-header-subtitle style="font-weight: bold; font-size: medium;">{{analysisData.totalCost}}</nz-page-header-subtitle>
+        </nz-page-header>
+       </div>
+
+       <!--Cost Breakdown by Bill-->
+       <div class="wrap-section">
+        <h2 class="section-headings">Cost Breakdown by Bill</h2>
+        <div class="chart-container">
+          <canvas baseChart
+          [data]="TotalCharts.doughnutChart"
+          [options]="TotalCharts.doughnutChart.options"
+          [legend]="true"
+          [type]="'doughnut'">
+        </canvas>
+        </div>
+       </div>
+
+       <!--Cost Breakdown by Member-->
+        <div class="wrap-section">
+          <h2 class="section-headings">Cost Breakdown by Member</h2>
+          <div class="chart-container">
+            <canvas baseChart
+              [data]="TotalCharts.barChart"
+              [options]="TotalCharts.barChart.options"
+              [legend]="true"
+              [type]="'bar'">
+            </canvas>
+          </div>
+        </div>
+
+        <!--List of bills-->
+        <div class="wrap-section">
+          <h2 class="section-headings" style="margin: 20px 0;">All Bills</h2>
+          
+          <a nz-dropdown [nzDropdownMenu]="menu" class="sort-dropdown">
+            Sort by Amount
+            <span nz-icon nzType="down"></span>
+          </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item (click)="changeSortOrder('asc')">Ascending</li>
+              <li nz-menu-item (click)="changeSortOrder('desc')">Descending</li>
+            </ul>
+          </nz-dropdown-menu>
+          
+          <nz-list nzBordered nzHeader="Cost Breakdown by Bill" nzFooter="Total Bills: {{ sortedBills.length }}">
+            <ng-container *ngFor="let bill of displayedBills">
+              <nz-list-item>
+                <span nz-typography><mark>{{ bill.billName }}</mark></span>
+                ₹{{ bill.amount }}
+              </nz-list-item>
+            </ng-container>
+          </nz-list>
+          
+          <nz-pagination
+            [(nzPageIndex)]="currentPage"
+            [nzTotal]="sortedBills.length"
+            [nzPageSize]="pageSize"
+            (nzPageIndexChange)="onPageChange($event)">
+          </nz-pagination>
+        </div>
+
+        <!--Each Member Total Expenditure-->
+        <div class="wrap-section">
+          <h2 class="section-headings">Total Expenditures Member vise</h2>
+        <nz-table #basicTable [nzFrontPagination]="false" [nzData]="analysisData.eachMemberTotalExpenditure">
+          <thead>
+            <tr>
+              <th style="font-weight: 500; font-size: medium;">Member</th>
+              <th style="font-weight: 500;font-size: medium;">Expenditure</th>
+              <!-- <th style="font-weight: 500;font-size: medium;">Amount</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of basicTable.data">
+              <td>{{ data.memberName }}</td>
+              <td>
+                {{data.totalExpenditure}}
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+
+        </div>
+      
+      <!-- <pre>{{ analysisData | json }}</pre> -->
     </div>
-    <pre>{{ analysisData | json }}</pre>
   </ng-container>
 </div>
