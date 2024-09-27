@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ApicallsService } from '../apicalls.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-bills',
@@ -33,6 +34,7 @@ export class BillsComponent {
     console.log(this.tripId);
     this.getBills();
     this.getMembers();
+    this.setupFormSubscriptions();
   }
 
   get members(): FormArray {
@@ -60,7 +62,7 @@ export class BillsComponent {
       membersArray.push(this.fb.group({
         memberId: [member.memberId],
         name: [member.name],
-        selected: [false],
+        selected: [true],
         amount: [0]
       }));
     });
@@ -155,8 +157,9 @@ export class BillsComponent {
     const memberControl = this.members.at(index);
     const selected = memberControl.get('selected')?.value;
     if (!selected) {
-      memberControl.get('amount')?.setValue(0);
+      memberControl.get('amount')?.setValue(0,{emiEvent:false});
     }
+    this.distributeShares();
   }
 
   calculateExpenseList(members: any[]): void {
@@ -228,6 +231,48 @@ export class BillsComponent {
         }
       );
     }
+  }
+  
+  setupFormSubscriptions(): void {
+    // When billAmount changes
+    this.billForm.get('billAmount')?.valueChanges
+      .pipe(debounceTime(300)) // Add debounce to avoid excessive calculations
+      .subscribe(() => {
+        this.distributeShares();
+      });
+
+    // When any member's 'selected' status changes
+    this.members.valueChanges
+      .pipe(debounceTime(300))
+      .subscribe(() => {
+        this.distributeShares();
+      });
+  }
+
+  distributeShares(): void {
+    const billAmount = this.billForm.get('billAmount')?.value;
+    const selectedMembers = this.members.controls.filter(memberControl => memberControl.get('selected')?.value);
+
+    if (selectedMembers.length === 0) {
+      return; // No members selected, nothing to distribute
+    }
+
+    // Calculate base share and remainder
+    const baseShare = Math.floor(billAmount / selectedMembers.length);
+    let remainder = billAmount % selectedMembers.length;
+
+    // Distribute the shares
+    selectedMembers.forEach(memberControl => {
+      let share = baseShare;
+
+      // Distribute the remainder across selected members
+      if (remainder > 0) {
+        share += 1;
+        remainder -= 1;
+      }
+
+      memberControl.get('amount')?.setValue(share);
+    });
   }
   
   

@@ -79,57 +79,37 @@ export class AnalysisComponent implements OnInit {
   }
   getRandomColor(): string {
     const colorList: string[] = [
-      '#87CEEB', // Sky Blue
-      '#FF7F50', // Coral
-      '#90EE90', // Light Green
-      '#3CB371', // Medium Sea Green
-      '#FFDAB9', // Peach
-      '#FFA07A', // Light Salmon
-      '#F0E68C', // Khaki
-      '#E6E6FA', // Lavender
-      '#4682B4', // Steel Blue
-      '#DAA520', // Goldenrod
-      '#FF6347', // Tomato
-      '#7B68EE', // Medium Slate Blue
-      '#AFEEEE', // Pale Turquoise
-      '#F08080', // Light Coral
-      '#DDA0DD', // Plum
-      '#B0C4DE', // Light Steel Blue
-      '#FA8072', // Salmon
-      '#BA55D3', // Medium Orchid
-      '#7FFF00', // Chartreuse
-      '#FAFAD2', // Light Goldenrod Yellow
-      '#D8BFD8', // Thistle
-      '#3CB371', // Medium Sea Green
-      '#FFDEAD', // Navajo White
-      '#87CEFA', // Sky Blue
-      '#CD853F', // Peru
-      '#ADD8E6', // Light Blue
-      '#F5DEB3', // Wheat
-      '#778899', // Light Slate Gray
-      '#DA70D6', // Orchid
-      '#FFE4E1', // Misty Rose
-      '#F4A460', // Sandy Brown
-      '#EEE8AA', // Pale Goldenrod
-      '#4169E1', // Royal Blue
-      '#BDB76B', // Dark Khaki
-      '#20B2AA', // Light Sea Green
-      '#8470FF', // Light Slate Blue
-      '#BC8F8F', // Rosy Brown
-      '#9370DB', // Medium Purple
-      '#FFD700', // Gold
-      '#00FF7F', // Spring Green
-      '#B0E0E6', // Powder Blue
-      '#FF9999', // Light Salmon Pink
-      '#F5FFFA', // Mint Cream
-      '#F0F8FF', // Alice Blue
-      '#DEB887', // Burlywood
-      '#6A5ACD', // Slate Blue
-      '#E0FFFF', // Light Cyan
-      '#FFEFD5', // Papaya Whip
-      '#FFDAB9', // Peach Puff
-      '#2E8B57'  // Sea Green
-    ];
+      "#007bff", 
+      "#6cb2eb", 
+      "#b8daff", 
+      "#c3e6cb", 
+      "#ffeeba", 
+      "#f5c6cb", 
+      "#d6e9c6", 
+      "#f1f8ff", 
+      "#aed6f1", 
+      "#d4edda", 
+      "#a3d5ff", 
+      "#99c0ff", 
+      "#c5e3f6", 
+      "#e2eafc", 
+      "#c3f0ca", 
+      "#f9e8b2", 
+      "#f9d6d3", 
+      "#e3f6f5", 
+      "#ffc1c1", 
+      "#faf3d9", 
+      "#d1ecf1", 
+      "#bff0d1", 
+      "#fce7b1", 
+      "#e9f7ef", 
+      "#f8d7da", 
+      "#d9f2f1", 
+      "#f0f8ff", 
+      "#e3f2fd", 
+      "#ccf2ff", 
+      "#f6ddcc"
+    ];    
     
     const randomIndex = Math.floor(Math.random() * colorList.length);
     return colorList[randomIndex];

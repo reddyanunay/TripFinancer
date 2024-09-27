@@ -100,7 +100,7 @@
       <!--Bills Paid By You-->
       <div class="wrap-section">
         <h2 class="section-headings">Bills paid by you</h2>
-        <div *ngIf="analysisData?.billsPaid?.length > 0">
+        <div *ngIf="analysisData?.billsPaid?.length > 0; else noBillsTemplate">
           <div class="cards-container">
             <ng-container *ngFor="let bill of analysisData.billsPaid">
               <nz-card nzTitle="{{bill.billName}}" class="bill-card">
@@ -111,6 +111,9 @@
             </ng-container>
           </div>
         </div>
+        <ng-template #noBillsTemplate>
+          <p>You have not paid any bills in the trip yet.</p>
+        </ng-template>
       </div>
 
     </div>
