@@ -1,0 +1,111 @@
+/* Container for the trips page */
+.trips-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header section with the "All Trips" title and "Create Trip" button */
+.trips-container h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.trips-container .left-item {
+  font-size: 24px;
+  color: #333;
+}
+
+.trips-container .right-item button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.trips-container .right-item button:hover {
+  background-color: #0056b3;
+}
+
+/* List of trips */
+.trips-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.trips-list .trip-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.trips-list .trip-item:hover {
+  background-color: #f1f1f1;
+}
+
+/* Alignment of elements within the trip-item */
+.trip-name {
+  flex: 2;
+  font-size: 1.2em;
+}
+
+.trip-bills {
+  flex: 1;
+  text-align: center;
+}
+
+.delete-button {
+  flex: 0.5;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #dc3545;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
+/* Modal backdrop and modal content (if you add a modal later) */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 100%;
+}

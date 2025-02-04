@@ -1,0 +1,66 @@
+ import { Component } from '@angular/core';
+import { ApicallsService } from '../apicalls.service';
+import { FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-create-trip',
+  templateUrl: './create-trip.component.html',
+  styleUrls: ['./create-trip.component.css'] // add the ReactiveFormsModule to the imports array
+})
+export class CreateTripComponent {
+  tripForm: FormGroup;
+  Trip:any = {};
+
+  constructor(private fb: FormBuilder,private apiser:ApicallsService,private router:Router) {
+    this.tripForm = this.fb.group({
+      trip_id: [],
+      trip_name: [''],
+      no_of_people: 0,
+      members: this.fb.array([])
+    });
+  }
+
+  get members() {
+    return this.tripForm.get('members') as FormArray;
+  }
+
+  onNumberOfPeopleChange() {
+    const numberOfMembers = Math.min(this.tripForm.value.no_of_people, 15);
+    while (this.members.length !== numberOfMembers) {
+      if (this.members.length < numberOfMembers) {
+        this.members.push(this.fb.control(''));
+      } else {
+        this.members.removeAt(this.members.length - 1);
+      }
+    }
+  }
+  handleSuccess(response: any): void {
+    // Process the response if needed, then navigate to the next page
+    console.log('Trip successfully Created:', response);
+    this.apiser.tempTripId=response.tripId;
+    // After successful response, navigate to the next page
+    this.router.navigate(['/app-bills']);  // Replace '/next-page' with the actual route
+  }
+
+  submitDetails() {
+    const formValue = this.tripForm.value;
+    const tripData = {
+      tripName: formValue.trip_name,
+      noOfPeople: formValue.no_of_people,
+      members: formValue.members,
+      email:this.apiser.getUserFromLocalStorage().email
+    };
+    console.log('Trip data:', tripData);
+    console.log('token',this.apiser.getToken());
+    this.apiser.postTrip(tripData).subscribe(
+      (response:any)=>{
+        this.Trip=response;
+        this.handleSuccess(response);
+      },
+      (error: any) => {
+        console.error('Error posting trip:', error);
+      }
+    );
+  }
+}
