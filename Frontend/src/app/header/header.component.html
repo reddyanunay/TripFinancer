@@ -1,0 +1,19 @@
+  <div>
+    <nav class=" nav navbar navbar-expand-lg navbar-light bg-light p-3">
+      <div class="container-fluid">
+        <a class="navbar-brand" routerLink="/home">Trip Financer</a>       
+        <div class="items collapse navbar-collapse" id="navbarSupportedContent">
+          <div *ngIf="!this.ser.isAuthentication()" class="text-end">
+            <button class="buttontheme1"><a  routerLink="/app-signup-form" class="anchor2 me-2">Sign Up</a> </button> 
+            <button class="buttontheme2"><a  routerLink="/app-login" class="anchor1 me-2">Login</a></button>
+          </div>
+          <div *ngIf="this.ser.isAuthentication()" class="text-end">
+            <button class="buttontheme1"><a  routerLink="/app-user-profile" class="anchor2 me-2" (click)="yourTrips()">Your Trips</a> </button>
+            <button class="buttontheme1"><a  routerLink="#" class="anchor2 me-2" (click)="onLogout()">Log Out</a> </button> 
+          </div>
+        </div>
+       </div>
+    </nav>
+  </div>
+  
+  

@@ -1,0 +1,17 @@
+<div class="trips-container">
+  <h2>
+    <span class="left-item">All Trips</span>
+    <span class="right-item">
+      <button (click)="startNewTrip()">Create Trip</button>
+    </span>
+  </h2>
+
+  <!-- List of Trips -->
+  <ul class="trips-list">
+    <li *ngFor="let trip of trips" (click)="navigateToTrip(trip.tripId)" class="trip-item">
+      <span class="trip-name">{{ trip.trip_name }}</span>
+      <span class="trip-bills">No of Bills : {{ trip.no_of_bills }}</span>
+      <button (click)="confirmDelete($event, trip.tripId)" class="delete-button">Delete Trip</button>
+    </li>
+  </ul>
+</div>
