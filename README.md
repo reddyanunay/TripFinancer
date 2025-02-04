@@ -3,7 +3,7 @@
 TripFinancer is a web application built using Angular and Spring Boot, designed to help users manage and analyze trip expenses. It is similar to Splitwise but specifically made for handling trip-related expenses. Users can create trips, add people, log bills, and get a detailed analysis of who owes whom, how much each person spent, and even a comparative analysis of expenses by category.
 
 ## Features:
-- **Create Trips**: Users can create a trip and invite people.
+- **Create Trips**: Users can create a trip and add people.
 - **Add Bills**: Users can log bills and specify who paid for each.
 - **Expense Analysis**: After adding all the bills, the application provides a comprehensive analysis, including:
   - Who owes whom and how much.
